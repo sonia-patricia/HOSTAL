@@ -41,6 +41,7 @@
     
     <!-- Custom styles for this template -->
     <link href="{% static 'css/dashboard.css' %}" rel="stylesheet"> 
+    <link href="{% static 'css/mantenedor.css' %}" rel="stylesheet"> 
   </head>
   <body>
     
@@ -63,14 +64,14 @@
       <div class="position-sticky pt-3">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">
+            <a class="nav-link" aria-current="page" href="{% url 'home' %}">
               <span data-feather="home"></span>
               <i class="fas fa-home"></i>
               Home
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="{% url 'clientes' %}">
               <span data-feather="file"></span>
               <i class="fas fa-male"></i>
               Clientes
@@ -172,6 +173,9 @@
         <h1 class="h2">{% block title_main %}{% endblock %}</h1>        
       </div>
       
+      <div>
+        {% block content %}{% endblock %}
+      </div>
     </main>
   </div>
 </div>
