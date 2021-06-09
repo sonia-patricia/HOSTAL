@@ -3,55 +3,59 @@
 {% block title_main %}Mantenedor de Clientes{% endblock %}
 
 {% block content %}
-
-<!--<form action="" method="POST">
-    {% csrf_token %}
-    <table>
-    {{ form.as_table }}    
-    </table>
-    <input type="submit" value="Submit"/>
-</form>-->
 <style> 
     * {
     box-sizing: border-box;
     }
 
     input[type=text], input[type=number], select, textarea {
-    width: 400px;
+    width: 100%;
     padding: 6px;
     border: 1px solid #ccc;
     border-radius: 4px;
     resize: vertical;
     }
 
-    textarea {
+    /*textarea {
     height: 120px;
-    }
+    }*/
 
     label {
-    padding: 12px 12px 12px 0;
     display: inline-block;
+    /*font-weight: bold;*/
     }
-
 </style> 
 
 <main role="main" class="container">
 
-    <h3 class="lead" style="color: #596272"><strong>Crear Cliente</strong></h3><br><br>
-    <div id="">
-        <div class="col-6">
-            <form action="" method="POST" class="post-form" enctype="multipart/form-data">
-                <div>
-                    {%csrf_token%}
-                    <table style="font-size: small;">
-                        {{form.as_table}}
-                    </table>
-                    <input type="submit" class="btn btn-primary mt-4 mb-5" style="width: 120px;" value="Enviar">
-                </div>
-            </form>
-        </div>
-    </div>
+    {% url 'cliente_create' as the_url %}
+    {% if request.get_full_path == the_url %}
+    <h3 class="lead" style="color: #596272"><strong>Crear Cliente</strong></h3><br>
 
+    <div>
+        <a class="nav-link mb-2" href="{% url 'clientes' %}">
+                <i class="fas fa-chevron-left"></i> Volver</a>
+    </div>
+    {% else %}
+    <h3 class="lead" style="color: #596272"><strong>Actualizar Cliente</strong></h3><br>
+
+    <div>
+        <a class="nav-link mb-2" href="{% url 'clientes_list' %}">
+                <i class="fas fa-chevron-left"></i> Volver</a>
+    </div>
+    {% endif %}
+
+    <div class="col-12">
+        <form action="" method="POST" class="post-form" enctype="multipart/form-data">
+            <div>
+                {%csrf_token%}
+                <table style="font-size: small;">
+                    {{form.as_p}}
+                </table>
+                <input type="submit" class="btn btn-primary mt-4 mb-5" style="width: 120px;" value="Enviar">
+            </div>
+        </form>
+    </div>
 </main><br>
 
 {% endblock %}

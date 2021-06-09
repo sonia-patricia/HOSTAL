@@ -19,15 +19,18 @@ def clientes(request):
 class ClienteCreate(CreateView):
     model = Cliente
     fields = '__all__'
+    template_name = 'website/cliente_form.html'
+    success_url = reverse_lazy('clientes_list')
 
 class ClienteUpdate(UpdateView):
     model = Cliente
     #fields = ['nombre','telefono','email','direccion','usuario','contrasenia']    
     fields = '__all__'
+    success_url = reverse_lazy('clientes_list')
 
 class ClienteDelete(DeleteView):
     model = Cliente
-    success_url = reverse_lazy('clientes')
+    success_url = reverse_lazy('clientes_list')
 
 class ClienteDetailView(generic.DetailView):
     model = Cliente    
