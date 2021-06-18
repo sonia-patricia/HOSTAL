@@ -1,0 +1,17 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<h3>Detalle usuario</h3>
+
+<p>rut:{{ usuario.rut_usuario}}</p>
+<p>dv:{{ usuario.dv}}</p>
+<p>nombre:{{ usuario.nombre_usuario}}</p>
+<p>perfil:{{ usuario.perfil}}</p>
+<p>telefono:{{usuario.telefono}}</p>
+<P>email:{{usuario.email}}</P>
+<p>direccion:{{usuario.direccion}}</p>
+<p>inicio actividades:{{usuario.inicio_actividades}}</p>
+<p>activo:{{usuario.activo}}</p>
+
+{% endblock %}

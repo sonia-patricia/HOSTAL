@@ -1,0 +1,91 @@
+{% extends "base_generic.html" %}
+{% block title %}Usuarios{% endblock %}
+{% block title_main %}Mantenedor de Usuarios {% endblock %}
+
+
+{% block content %}
+{% load static %}
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    border: 1px solid #dddddd;
+}
+
+td, th {
+    text-align: left;
+    padding-left: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+thead {
+    background-color: #dddddd;
+    /*font-weight: bold;*/
+}
+</style>
+
+<main role="main" class="container">
+    
+    <h3 class="lead" style="color: #596272"><strong>Visualizar usuarios </strong></h3><br>
+    
+
+    <div>
+        <a class="nav-link mb-2" href="{% url 'usuario' %}">
+                <i class="fas fa-chevron-left"></i> Volver</a>
+    </div> 
+    
+    <div class="col-12">
+        <table>
+            <thead>
+                <tr>
+                    <td>Rut</td>
+                    <td>Dv</td>
+                    <td>Nombre</td>
+                    <td>Perfil</td>
+                    <td>Telefono</td>
+                    <td>Email</td>
+                    <td>Direccion</td>
+                    <td>Inicio actividades</td>
+                    <td>Activo</td>
+                    <td>Actividad</td>
+                </tr>
+            </thead>
+            <tbody class= "">
+                {% if object_list %}
+                {% for usuario in object_list %}
+                <tr>
+    
+                    <td>{{ usuario.rut_usuario}}</td>
+                    <td>{{ usuario.dv }}</td>
+                    <td>{{ usuario.nombre_usuario }}</td>
+                    <td>{{ usuario.perfil}}</td>
+                    <td>{{ usuario.telefono }}</td>
+                    <td>{{ usuario.email }}</td>
+                    <td>{{ usuario.direccion }}</td>
+                    <td>{{ usuario.inicio_actividades }}</td>
+                    <td>{{ usuario.activo }}</td>
+    
+                    <td style="text-align: center">
+                        <a class="btn btn-primary" 
+                        style="width: 50px; margin:0px; size:12px; height:50px;" 
+                        href="{% url 'usuario_update' usuario.pk %}">
+                        <i class="fas fa-edit"></i> Editar</a>
+                        <a class="btn btn-primary" style="width: 50px; margin:0px; size:12px; height:50px;"
+                         href="{% url 'usuario_delete' usuario.pk %}">
+                        <i class="fas fa-minus-circle"></i> Eliminar</a>
+                    </td>
+    
+                </tr>
+                {% endfor %}
+                {% else %}
+                <h1>No hay registros de usuario</h1>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</main><br>
+{% endblock %}
