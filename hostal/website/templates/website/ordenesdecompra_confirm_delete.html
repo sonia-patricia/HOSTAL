@@ -1,13 +1,13 @@
 {% extends "base_generic.html" %}
-{% block title %}Ordenes de compra{% endblock %}
-{% block title_main %}Mantenedor ordenes de compra {% endblock %}
+{% block title %}Órdenes de Compra{% endblock %}
+{% block title_main %}Mantenedor Órdenes de Compra {% endblock %}
 
 {% block content %}
 
 <main role="main" class="container">
-    <h3 class="lead" style="color: #596272"><strong>Eliminar Ordenesdecompra</strong></h3><br><br>
+    <h3 class="lead" style="color: #596272"><strong>Eliminar Orden de Compra</strong></h3><br><br>
 
-    <h5 style="font-weight: lighter;">¿Desea eliminar el registro de <strong>{{ ordenesdecompra }}</strong>?</h5><br>
+    <h5 style="font-weight: lighter;">¿Desea eliminar el registro <strong>{{ ordenesdecompra }}</strong>?</h5><br>
 
     <form action="" method="POST">
         {% csrf_token %}

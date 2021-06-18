@@ -1,6 +1,6 @@
 {% extends "base_generic.html" %}
 {% block title %}Ordenesdecompras{% endblock %}
-{% block title_main %}Mantenedor Orden de compras {% endblock %}
+{% block title_main %}Mantenedor Órdenes de Compras {% endblock %}
 
 
 {% block content %}
@@ -30,7 +30,7 @@ thead {
 
 <main role="main" class="container">
     
-    <h3 class="lead" style="color: #596272"><strong>Mantenedor de Orden de compras</strong></h3><br>
+    <h3 class="lead" style="color: #596272"><strong>Visualizar Órdenes de Compra</strong></h3><br>
     
 
     <div>
@@ -47,6 +47,7 @@ thead {
                     <td>Fecha_salida</td>
                     <td>Total_dias</td>
                     <td>Total_huespedes</td>
+                    <td>Acciones</td>
                 </tr>
             </thead>
             <tbody class= "">
@@ -70,7 +71,7 @@ thead {
                 </tr>
                 {% endfor %}
                 {% else %}
-                <h1>No hay registros de ordenes de compra.</h1>
+                <h1>No hay registros de órdenes de compra.</h1>
                 {% endif %}
             </tbody>
         </table>

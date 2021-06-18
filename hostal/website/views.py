@@ -8,6 +8,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .models import Cliente, Orden_pedido, Proveedor, Producto, Habitacion, Usuarios, Empleado, Ordenesdecompra
 from django.views import generic
+from django.db.models import Q
 
 
 # Create your views here.
@@ -17,10 +18,27 @@ def home(request):
 
 
 def clientes(request):
-    return render(request, 'website/clientes.html')   
+    busqueda = request.GET.get("buscar")
+    cliente = Cliente.objects.all()
+
+    if busqueda:
+        cliente = Cliente.objects.filter(
+            Q(rut_cliente__icontains = busqueda) |
+            Q(nombre__icontains = busqueda)
+        ).distinct()
+
+    return render(request, 'website/clientes.html', {'cliente':cliente}) 
 
 def habitaciones(request):
-    return render(request, 'website/habitaciones.html')   
+    busqueda = request.GET.get("buscar")
+    habitacion = Habitacion.objects.all()
+
+    if busqueda:
+        habitacion = Habitacion.objects.filter(
+            Q(numero_habitacion__icontains = busqueda)
+        ).distinct()
+
+    return render(request, 'website/habitaciones.html', {'habitacion':habitacion})  
       
 # vista producto
 def producto(request):
@@ -33,7 +51,16 @@ def usuario(request):
 #EMPLEADOS JUAN
 
 def empleados(request):
-    return render(request, 'website/empleados.html')
+    busqueda = request.GET.get("buscar")
+    empleado = Empleado.objects.all()
+
+    if busqueda:
+        empleado = Empleado.objects.filter(
+            Q(rut_empleado__icontains = busqueda) |
+            Q(nombres__icontains = busqueda)
+        ).distinct()
+
+    return render(request, 'website/empleados.html', {'empleado':empleado})
 
 class EmpleadoCreate(CreateView):
     model = Empleado

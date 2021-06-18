@@ -1,6 +1,6 @@
 {% extends "base_generic.html" %}
-{% block title %}Ordenesdecompra{% endblock %}
-{% block title_main %}Mantenedor de ordenes de compra{% endblock %}
+{% block title %}Órdenes de Compra{% endblock %}
+{% block title_main %}Mantenedor Órdenes de Compra{% endblock %}
 
 {% block content %}
 <style> 
@@ -30,14 +30,14 @@
 
     {% url 'ordenesdecompra_create' as the_url %}
     {% if request.get_full_path == the_url %}
-    <h3 class="lead" style="color: #596272"><strong>Crear Ordenesdecompra</strong></h3><br>
+    <h3 class="lead" style="color: #596272"><strong>Crear Orden de Compra</strong></h3><br>
 
     <div>
         <a class="nav-link mb-2" href="{% url 'ordenesdecompras' %}">
                 <i class="fas fa-chevron-left"></i> Volver</a>
     </div>
     {% else %}
-    <h3 class="lead" style="color: #596272"><strong>Actualizar Orden de compra</strong></h3><br>
+    <h3 class="lead" style="color: #596272"><strong>Actualizar Orden de Compra</strong></h3><br>
 
     <div>
         <a class="nav-link mb-2" href="{% url 'ordenesdecompras_list' %}">
