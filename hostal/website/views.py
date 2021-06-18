@@ -87,7 +87,15 @@ class EmpleadoListView(generic.ListView):
 #juan
 
 def ordenesdecompra(request):
-    return render(request, 'website/ordenesdecompras.html')
+    busqueda = request.GET.get("buscar")
+    ordenesdecompra = Ordenesdecompra.objects.all()
+
+    if busqueda:
+        ordenesdecompra = Ordenesdecompra.objects.filter(
+            Q(numero_orden_c__icontains = busqueda)
+        ).distinct()
+
+    return render(request, 'website/ordenesdecompras.html', {'ordenesdecompra':ordenesdecompra})
 
 class OrdenesdecompraCreate(CreateView):
     model = Ordenesdecompra
