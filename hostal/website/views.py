@@ -6,7 +6,7 @@ from django.views.generic.detail import DetailView
 
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .models import Cliente, Orden_pedido, Proveedor, Producto, Habitacion, Usuarios, Empleado, Ordenesdecompra
+from .models import Cliente, Orden_pedido, Comedor, Proveedor, Producto, Habitacion, Usuarios, Empleado, Ordenesdecompra
 from django.views import generic
 from django.db.models import Q
 
@@ -48,6 +48,42 @@ def producto(request):
 def usuario(request):
     return render(request, 'website/usuario.html')
 
+# vista PLATO-COMEDOR
+def comedor(request):
+    busqueda = request.GET.get("buscar")
+    comedor = Comedor.objects.all()
+
+    if busqueda:
+        comedor = Comedor.objects.filter(
+            Q(codigo_plato__icontains = busqueda) |
+            Q(nombre__icontains = busqueda)).distinct()
+    return render(request, 'website/comedor.html', {'comedor':comedor})
+
+#PLATO-COMEDOR-CRUD
+class ComedorCreate(CreateView):
+    model = Comedor
+    fields = '__all__'
+    template_name = 'website/comedor_form.html'
+    success_url = reverse_lazy('comedor_list')
+
+class  ComedorUpdate(UpdateView):
+    model = Comedor
+    fields = '__all__'
+    success_url = reverse_lazy('comedor_list')
+
+class ComedorDelete(DeleteView):
+    model = Comedor
+    success_url = reverse_lazy('comedor_list')
+
+class ComedorDetailView(generic.DetailView):
+    model = Comedor    
+
+class ComedorListView(generic.ListView):
+    model = Comedor
+    template_name = 'website/comedor_list.html'
+     
+
+
 #EMPLEADOS JUAN
 
 def empleados(request):
@@ -57,9 +93,7 @@ def empleados(request):
     if busqueda:
         empleado = Empleado.objects.filter(
             Q(rut_empleado__icontains = busqueda) |
-            Q(nombres__icontains = busqueda)
-        ).distinct()
-
+            Q(nombres__icontains = busqueda) ).distinct()
     return render(request, 'website/empleados.html', {'empleado':empleado})
 
 class EmpleadoCreate(CreateView):
@@ -211,9 +245,6 @@ class ProveedorUpdate(UpdateView):
 class ProveedorListView(generic.ListView):
     model = Proveedor
     template_name = 'website/proveedor_list.html'
-
-
-
 
 
 #Producto CRUD

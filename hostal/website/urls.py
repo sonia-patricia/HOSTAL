@@ -65,5 +65,13 @@ urlpatterns = [
     path('ordenesdecompra/<int:pk>/update', views.OrdenesdecompraUpdate.as_view(), name='ordenesdecompra_update'),
     path('ordenesdecompra/<int:pk>/delete', views.OrdenesdecompraDelete.as_view(), name='ordenesdecompra_delete'),
 
+    #PLATO-COMEDOR
+    path('comedor',views.comedor,name='comedor'),
+    path('comedor/list', views.ComedorListView.as_view(), name='comedor_list'),
+    path('comedor/<int:pk>', views.ComedorDetailView.as_view(), name='comedor-detail'),
+    path('comedor/create', views.ComedorCreate.as_view(), name='comedor_create'),
+    path('comedor/<int:pk>/update', views.ComedorUpdate.as_view(), name='comedor_update'),
+    path('comedor/<int:pk>/delete', views.ComedorDelete.as_view(), name='comedor_delete'),
+
 ]
     

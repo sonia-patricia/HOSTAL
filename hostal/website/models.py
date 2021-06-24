@@ -174,7 +174,6 @@ class Empleado(models.Model):
 
 #juan
 class Ordenesdecompra(models.Model):
-
     numero_orden_c = models.IntegerField(primary_key=True, help_text='')
     fecha_llegada = models.DateField(default=timezone.now)
     fecha_salida = models.DateField(default=timezone.now)
@@ -186,4 +185,35 @@ class Ordenesdecompra(models.Model):
 
     def __str__(self):
         return str(self.numero_orden_c)
+
+#modelo servicio (sin vista, solo para llaves foraneas )
+class Servicio(models.Model):
+    codigo_servicio = models.IntegerField(primary_key=True, help_text='')
+    tipo = models.CharField(max_length=100)
+    precio = models.IntegerField()
+
+    def get_absolute_url(self):
+        return reverse('servicio-detail', args=[str(self.id)])
+
+    def __str__(self):
+        return self.codigo_servicio
+
+class Comedor(models.Model):
+    codigo_plato = models.IntegerField(primary_key=True, help_text='')
+    nombre = models.CharField(max_length=25)
+    descripcion = models.CharField(max_length=150)
+    tipo_comida = models.CharField(max_length=25)
+    dia = models.DateField(default=timezone.now)  # cambiar para que salga nombre el dia....
+    precio = models.IntegerField()
+    codigo_servicio = models.ForeignKey(Servicio,on_delete=models.CASCADE)
+    
+    
+    def get_absolute_url(self):
+        return reverse('plato-detail', args=[str(self.id)])
+
+    def __str__(self):
+        return self.nombre
+
+
+
 
