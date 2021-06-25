@@ -164,7 +164,8 @@ class Empleado(models.Model):
     direccion = models.CharField(max_length=50)
     usuario = models.CharField(max_length=25)
     contrasenia = models.CharField(max_length=8)
-
+    #id_empleado = models.ForeignKey(Tipo_empleado,on_delete=models.CASCADE)
+    #rut_hostal = models.ForeignKey(Hostal,on_delete=models.CASCADE)
     def get_absolute_url(self):
         return reverse('empleado-detail', args=[str(self.id)])
 
@@ -179,6 +180,9 @@ class Ordenesdecompra(models.Model):
     fecha_salida = models.DateField(default=timezone.now)
     total_dias = models.IntegerField()
     total_huespedes = models.IntegerField()
+    rut_cliente = models.ForeignKey(Cliente,on_delete=models.CASCADE)
+    #codigo_servicio = models.ForeignKey(Servicio,on_delete=models.CASCADE)
+    #numero_factura = models.ForeignKey(Factura,on_delete=models.CASCADE)
 
     def get_absolute_url(self):
         return reverse('ordenesdecompra-detail', args=[str(self.id)])
@@ -214,6 +218,21 @@ class Comedor(models.Model):
     def __str__(self):
         return self.nombre
 
+class Factura(models.Model):
+    numero_factura = models.IntegerField(primary_key=True, help_text='')
+    fecha = models.DateField(default=timezone.now)
+    nombre = models.CharField(max_length=25)
+    neto = models.IntegerField(max_length=8)
+    iva = models.IntegerField(max_length=6)
+    total = models.IntegerField(max_length=8)  # cambiar para que salga nombre el dia....
+    #numero_orden_c = models.ForeignKey(Ordenesdecompra,on_delete=models.CASCADE)
+    
+    
+    def get_absolute_url(self):
+        return reverse('factura-detail', args=[str(self.id)])
+
+    def __str__(self):
+        return str(self.numero_factura)
 
 
 

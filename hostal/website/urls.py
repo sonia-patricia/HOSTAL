@@ -73,5 +73,14 @@ urlpatterns = [
     path('comedor/<int:pk>/update', views.ComedorUpdate.as_view(), name='comedor_update'),
     path('comedor/<int:pk>/delete', views.ComedorDelete.as_view(), name='comedor_delete'),
 
+    #FACTURA
+    path('facturas',views.factura,name='facturas'),
+    path('facturas/list', views.FacturaListView.as_view(), name='facturas_list'),
+    path('factura/<int:pk>', views.FacturaDetailView.as_view(), name='factura-detail'),
+    path('factura/create', views.FacturaCreate.as_view(), name='factura_create'),
+    path('factura/<int:pk>/update', views.FacturaUpdate.as_view(), name='factura_update'),
+    path('factura/<int:pk>/delete', views.FacturaDelete.as_view(), name='factura_delete'),
+
+
 ]
     

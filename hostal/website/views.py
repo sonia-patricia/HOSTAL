@@ -6,7 +6,7 @@ from django.views.generic.detail import DetailView
 
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .models import Cliente, Orden_pedido, Comedor, Proveedor, Producto, Habitacion, Usuarios, Empleado, Ordenesdecompra
+from .models import Cliente, Factura, Orden_pedido, Comedor, Proveedor, Producto, Habitacion, Servicio, Usuarios, Empleado, Ordenesdecompra
 from django.views import generic
 from django.db.models import Q
 
@@ -118,7 +118,7 @@ class EmpleadoListView(generic.ListView):
     model = Empleado
     template_name = 'website/empleados_list.html'
      
-#juan
+#juan Ordenes de compra
 
 def ordenesdecompra(request):
     busqueda = request.GET.get("buscar")
@@ -154,6 +154,40 @@ class OrdenesdecompraListView(generic.ListView):
     model = Ordenesdecompra
     template_name = 'website/ordenesdecompras_list.html'
 
+#juan factura
+def factura(request):
+    busqueda = request.GET.get("buscar")
+    factura = Factura.objects.all()
+
+    if busqueda:
+        factura = Factura.objects.filter(
+            Q(numero_factura__icontains = busqueda)
+        ).distinct()
+
+    return render(request, 'website/facturas.html', {'factura':factura})
+
+class FacturaCreate(CreateView):
+    model = Factura
+    fields = '__all__'
+    template_name = 'website/factura_form.html'
+    success_url = reverse_lazy('facturas_list')
+
+class FacturaUpdate(UpdateView):
+    model = Factura
+    #fields = ['nombres','a.paterno','a.materno','telefono','email','direccion','usuario','contrasenia']    
+    fields = '__all__'
+    success_url = reverse_lazy('facturas_list')
+
+class FacturaDelete(DeleteView):
+    model = Factura
+    success_url = reverse_lazy('facturas_list')
+
+class FacturaDetailView(generic.DetailView):
+    model = Factura    
+
+class FacturaListView(generic.ListView):
+    model = Factura
+    template_name = 'website/facturas_list.html'
 
 
 #sonia
@@ -293,7 +327,6 @@ class UsuarioDetailView(generic.DetailView):
 class UsuarioListView(generic.ListView):
     model = Usuarios
     template_name = 'website/usuario_list.html'
-
 
 
 
