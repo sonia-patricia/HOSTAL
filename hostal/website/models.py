@@ -166,6 +166,7 @@ class Empleado(models.Model):
     contrasenia = models.CharField(max_length=8)
     #id_empleado = models.ForeignKey(Tipo_empleado,on_delete=models.CASCADE)
     #rut_hostal = models.ForeignKey(Hostal,on_delete=models.CASCADE)
+
     def get_absolute_url(self):
         return reverse('empleado-detail', args=[str(self.id)])
 
@@ -222,9 +223,9 @@ class Factura(models.Model):
     numero_factura = models.IntegerField(primary_key=True, help_text='')
     fecha = models.DateField(default=timezone.now)
     nombre = models.CharField(max_length=25)
-    neto = models.IntegerField(max_length=8)
-    iva = models.IntegerField(max_length=6)
-    total = models.IntegerField(max_length=8)  # cambiar para que salga nombre el dia....
+    neto = models.IntegerField()
+    iva = models.IntegerField()
+    total = models.IntegerField()  # cambiar para que salga nombre el dia....
     #numero_orden_c = models.ForeignKey(Ordenesdecompra,on_delete=models.CASCADE)
     
     
@@ -233,6 +234,24 @@ class Factura(models.Model):
 
     def __str__(self):
         return str(self.numero_factura)
+
+
+#CRUD inventario
+class Inventario(models.Model):
+    codigo = models.IntegerField(primary_key=True, help_text='')
+    nombre = models.CharField(max_length=100)
+    fecha_actual = models.DateField(default=timezone.now)
+    fecha_elaboracion = models.DateField(default=timezone.now)
+    fecha_vencimiento = models.DateField(default=timezone.now)
+    total_cantidad = models.CharField(max_length=100)
+    responsable = models.CharField(max_length=100, blank=True)
+
+    
+    def get_absolute_url(self):
+        return reverse('inventario-detail', args=[str(self.id)])
+
+    def __str__(self):
+        return str(self.codigo)
 
 
 

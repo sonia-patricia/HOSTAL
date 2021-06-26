@@ -81,6 +81,14 @@ urlpatterns = [
     path('factura/<int:pk>/update', views.FacturaUpdate.as_view(), name='factura_update'),
     path('factura/<int:pk>/delete', views.FacturaDelete.as_view(), name='factura_delete'),
 
+     #INVENTARIO
+    path('inventario',views.inventario,name='inventario'),
+    path('inventario/list', views.InventarioListView.as_view(), name='inventario_list'),
+    path('inventario/<int:pk>', views.InventarioDetailView.as_view(), name='inventario-detail'),
+    path('inventario/create', views.InventarioCreate.as_view(), name='inventario_create'),
+    path('inventario/<int:pk>/update', views.InventarioUpdate.as_view(), name='inventario_update'),
+    path('inventario/<int:pk>/delete', views.InventarioDelete.as_view(), name='inventario_delete'),
+
 
 ]
     

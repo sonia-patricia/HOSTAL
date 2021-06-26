@@ -3,10 +3,11 @@ from django.shortcuts import render
 from django.http.response import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.generic.detail import DetailView
+from django.contrib import messages
 
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .models import Cliente, Factura, Orden_pedido, Comedor, Proveedor, Producto, Habitacion, Servicio, Usuarios, Empleado, Ordenesdecompra
+from .models import Cliente, Factura, Orden_pedido, Comedor, Proveedor, Producto, Habitacion, Servicio, Usuarios, Empleado, Ordenesdecompra, Inventario
 from django.views import generic
 from django.db.models import Q
 
@@ -48,6 +49,10 @@ def producto(request):
 def usuario(request):
     return render(request, 'website/usuario.html')
 
+# vista INVENTARIO 
+def inventario(request):
+    return render(request, 'website/inventario.html')
+
 # vista PLATO-COMEDOR
 def comedor(request):
     busqueda = request.GET.get("buscar")
@@ -82,7 +87,6 @@ class ComedorListView(generic.ListView):
     model = Comedor
     template_name = 'website/comedor_list.html'
      
-
 
 #EMPLEADOS JUAN
 
@@ -328,5 +332,28 @@ class UsuarioListView(generic.ListView):
     model = Usuarios
     template_name = 'website/usuario_list.html'
 
+
+#INVENTARIO CRUD
+class InventarioCreate(CreateView):
+    model = Inventario
+    fields = '__all__'
+    template_name = 'website/inventario_form.html'
+    success_url = reverse_lazy('inventario_list')
+
+class InventarioUpdate(UpdateView):
+    model = Inventario  
+    fields = '__all__'
+    success_url = reverse_lazy('inventario_list')
+
+class InventarioDelete(DeleteView):
+    model = Inventario
+    success_url = reverse_lazy('inventario_list')
+
+class InventarioDetailView(generic.DetailView):
+    model = Inventario    
+
+class InventarioListView(generic.ListView):
+    model = Inventario
+    template_name = 'website/inventario_list.html'
 
 
