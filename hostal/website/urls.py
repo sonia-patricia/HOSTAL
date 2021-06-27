@@ -41,13 +41,9 @@ urlpatterns = [
     path('producto/<int:pk>/delete', views.ProductoDelete.as_view(), name='producto_delete'),
 
 
-    #Producto, Listar, Detalles, Crear, Actualizar, Eliminar  USUARIO
-    path('usuario', views.usuario, name='usuario'),
-    path('usuario/list', views.UsuarioListView.as_view(), name='usuario_list'),
-    path('usuario/<int:pk>', views.UsuarioDetailView.as_view(), name='usuario-detail'),
-    path('usuario/create', views.UsuarioCreate.as_view(), name='usuario_create'),
-    path('usuario/<int:pk>/update', views.UsuarioUpdate.as_view(), name='usuario_update'),
-    path('usuario/<int:pk>/delete', views.UsuarioDelete.as_view(), name='usuario_delete'),
+    #Listar, Detalles, Crear, Actualizar, Eliminar  USUARIO
+    path('usuario', views.UsuarioListView.as_view(), name= 'usuario_list'),
+    path('usuario/create', views.UsuarioCreate,name='usuario_create'),
 
     
     #JUAN

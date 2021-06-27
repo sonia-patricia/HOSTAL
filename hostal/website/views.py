@@ -1,16 +1,17 @@
 from django.db import models
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http.response import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.generic.detail import DetailView
 from django.contrib import messages
+from django.contrib.auth.models import User
 
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .models import Cliente, Factura, Orden_pedido, Comedor, Proveedor, Producto, Habitacion, Servicio, Usuarios, Empleado, Ordenesdecompra, Inventario
+from .models import Cliente, Factura, Orden_pedido, Comedor, Proveedor, Producto, Habitacion, Servicio, Empleado, Ordenesdecompra, Inventario
 from django.views import generic
 from django.db.models import Q
-
+from .forms import UsuarioCreateForm
 
 # Create your views here.
 @login_required(login_url='/accounts/login/')
@@ -46,8 +47,7 @@ def producto(request):
     return render(request, 'website/producto.html')
 
 # vista USUARIOS
-def usuario(request):
-    return render(request, 'website/usuario.html')
+
 
 # vista INVENTARIO 
 def inventario(request):
@@ -310,27 +310,6 @@ class ProductoListView(generic.ListView):
     template_name = 'website/producto_list.html'
 
 #USUARIO CRUD
-class UsuarioCreate(CreateView):
-    model = Usuarios
-    fields = '__all__'
-    template_name = 'website/usuarios_form.html'
-    success_url = reverse_lazy('usuario_list')
-
-class UsuarioUpdate(UpdateView):
-    model = Usuarios  
-    fields = '__all__'
-    success_url = reverse_lazy('usuario_list')
-
-class UsuarioDelete(DeleteView):
-    model = Usuarios
-    success_url = reverse_lazy('usuario_list')
-
-class UsuarioDetailView(generic.DetailView):
-    model = Usuarios    
-
-class UsuarioListView(generic.ListView):
-    model = Usuarios
-    template_name = 'website/usuario_list.html'
 
 
 #INVENTARIO CRUD
@@ -357,3 +336,38 @@ class InventarioListView(generic.ListView):
     template_name = 'website/inventario_list.html'
 
 
+class UsuarioListView(generic.ListView):
+    model = User
+    template_name = 'website/usuario_list.html'
+
+def UsuarioCreate(request):
+    if request.method == 'POST':
+        if not User.objects.filter(username = request.POST['username']).exists():
+            form = UsuarioCreateForm(request.POST)
+            if form.is_valid():                
+                grupo = int(request.POST['grupo_usuario'])
+                if form.save(commit=False):
+                    form.save(commit=True, grupo_usuario=grupo)
+
+        return redirect('usuario_list')
+                
+    else:
+        form = UsuarioCreateForm()
+        return render(request, 'website/usuario_form.html', {'form':form})
+
+def UsuarioUpdate(request):
+    if request.method == 'POST':
+        user = User.objects.get(username=request.POST['username'])
+        if user:
+            form = UsuarioCreateForm(request.POST)
+            if form.is_valid():                
+                grupo = int(request.POST['grupo_usuario'])
+                if form.save(commit=False):
+                    form.save(commit=True, grupo_usuario=grupo)
+
+        return redirect('usuario_list')
+                
+    else:
+        user = User.objects.get(username=request.POST['username'])
+        form = UsuarioCreateForm()
+        return render(request, 'website/usuario_form.html', {'form':form})

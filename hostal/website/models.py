@@ -4,6 +4,7 @@ from django.db.models.enums import Choices
 from django.utils import timezone
 from django.db.models.fields import EmailField, IntegerField, BigAutoField, DateField, DateTimeField, DateTimeCheckMixin
 from django.urls import reverse
+from django.contrib.auth.models import User
 import uuid
 
 # Create your models here.
@@ -24,6 +25,7 @@ class Proveedor(models.Model):
     email = models.EmailField(null=False)
     direccion = models.CharField(max_length=100,null=False)
     id_rubro = models.ForeignKey(Rubro_proveedor,on_delete=models.CASCADE)
+    usuario = models.OneToOneField(User,on_delete=models.CASCADE, null=True)
 
     def get_absolute_url(self):
         return reverse('proveedores')
@@ -54,8 +56,9 @@ class Cliente(models.Model):
     telefono = models.IntegerField()
     email = models.CharField(max_length=25)
     direccion = models.CharField(max_length=25)
-    usuario = models.CharField(max_length=25)
-    contrasenia = models.CharField(max_length=8)
+    #usuario = models.CharField(max_length=25)
+    #contrasenia = models.CharField(max_length=8)
+    usuario = models.OneToOneField(User,on_delete=models.CASCADE, null=True)
 
     def get_absolute_url(self):
         return reverse('cliente-detail', args=[str(self.id)])
@@ -133,22 +136,8 @@ tipo_perfil= [
     ('cambiar', 'cambiar'),
     ('agregar', 'agregar')
 ]
-class Usuarios(models.Model):
-    rut_usuarios=models.IntegerField(primary_key=True, help_text='' )
-    dv=models.CharField(max_length=2)
-    nombre_usuario=models.CharField(max_length=80, null=False)
-    perfil = models.CharField(max_length=25, null=False, blank=False, choices=tipo_perfil)
-    telefono=models.CharField(max_length=12,)
-    email=models.EmailField(max_length=300)
-    direccion=models.CharField(max_length=250,null=False)
-    inicio_actividades=models.DateField(default=timezone.now)
-    activo=models.BooleanField(default=True, verbose_name="Eres un usuario activo?")
 
-    def get_absolute_url(self):
-        return reverse('usuario-detail', args=[str(self.id)])
-
-    def __str__(self):
-        return self.nombre_usuario
+ 
    
 
 # JUAN
@@ -162,8 +151,9 @@ class Empleado(models.Model):
     telefono = models.IntegerField()
     email = models.CharField(max_length=25)
     direccion = models.CharField(max_length=50)
-    usuario = models.CharField(max_length=25)
-    contrasenia = models.CharField(max_length=8)
+    #usuario = models.CharField(max_length=25)
+    #contrasenia = models.CharField(max_length=8)
+    usuario = models.OneToOneField(User,on_delete=models.CASCADE, null=True)
     #id_empleado = models.ForeignKey(Tipo_empleado,on_delete=models.CASCADE)
     #rut_hostal = models.ForeignKey(Hostal,on_delete=models.CASCADE)
 
