@@ -44,7 +44,9 @@ urlpatterns = [
     #Listar, Detalles, Crear, Actualizar, Eliminar  USUARIO
     path('usuario', views.UsuarioListView.as_view(), name= 'usuario_list'),
     path('usuario/create', views.UsuarioCreate,name='usuario_create'),
-
+    path('usuario/<int:user_id>/update', views.UsuarioUpdate,name='usuario_update'),
+    path('usuario/<int:user_id>/deactivate', views.UsuarioDeactivate,name='usuario_deactivate'),
+    path('usuario/<int:user_id>/activate', views.UsuarioActivate,name='usuario_activate'),
     
     #JUAN
     path('empleados',views.empleados,name='empleados'),

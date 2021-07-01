@@ -1,0 +1,17 @@
+{% extends "base_generic.html" %}
+{% block title %}Usuario{% endblock %}
+{% block title_main %}Mantenedor de usuarios{% endblock %}
+
+{% block content %}
+
+<h3>Actualizar usuario</h3>
+
+<form method="post" class="row g-3">
+    {%csrf_token%}
+    {{ form }}
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary">Actualizar</button>
+    </div>
+</form>
+
+{% endblock %}

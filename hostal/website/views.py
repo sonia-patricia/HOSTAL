@@ -11,7 +11,7 @@ from django.urls import reverse_lazy
 from .models import Cliente, Factura, Orden_pedido, Comedor, Proveedor, Producto, Habitacion, Servicio, Empleado, Ordenesdecompra, Inventario
 from django.views import generic
 from django.db.models import Q
-from .forms import UsuarioCreateForm
+from .forms import UsuarioCreateForm, UsuarioUpdateForm
 
 # Create your views here.
 @login_required(login_url='/accounts/login/')
@@ -355,19 +355,49 @@ def UsuarioCreate(request):
         form = UsuarioCreateForm()
         return render(request, 'website/usuario_form.html', {'form':form})
 
-def UsuarioUpdate(request):
+def UsuarioUpdate(request, user_id):
+    user = User.objects.get(id=user_id)
     if request.method == 'POST':
-        user = User.objects.get(username=request.POST['username'])
-        if user:
-            form = UsuarioCreateForm(request.POST)
-            if form.is_valid():                
-                grupo = int(request.POST['grupo_usuario'])
-                if form.save(commit=False):
-                    form.save(commit=True, grupo_usuario=grupo)
+        form = UsuarioUpdateForm(request.POST)
+        username = request.POST['username']
+        grupo_usuario = request.POST['grupo_usuario']
+        form.save(commit=True,user=user,username=username,grupo_usuario_i=grupo_usuario)
 
         return redirect('usuario_list')
                 
+    else:        
+        grupo_usuario = 0
+        if user.groups.filter(name='Administrador').exists():
+            grupo_usuario = 1
+        elif user.groups.filter(name='Empleado').exists():
+            grupo_usuario = 2
+        elif user.groups.filter(name='Cliente').exists():
+            grupo_usuario = 3
+        elif user.groups.filter(name='Proveedor').exists():
+            grupo_usuario = 4
+
+        form = UsuarioUpdateForm(
+            initial={
+                'username': user.username , 
+                'grupo_usuario': grupo_usuario })
+
+        return render(request, 'website/usuario_update.html', {'form':form})
+
+def UsuarioDeactivate(request, user_id):
+    user = User.objects.get(id=user_id)
+    if request.method == 'POST':
+        user.is_active = False
+        user.save()        
+        return redirect('usuario_list')
     else:
-        user = User.objects.get(username=request.POST['username'])
-        form = UsuarioCreateForm()
-        return render(request, 'website/usuario_form.html', {'form':form})
+        return render(request,'website/usuario_deactivate.html', {'user':user})
+    
+
+def UsuarioActivate(request, user_id):
+    user = User.objects.get(id=user_id)
+    if request.method == 'POST':
+        user.is_active = True
+        user.save()
+        return redirect('usuario_list')
+    else:
+        return render(request,'website/usuario_activate.html', {'user':user})

@@ -23,15 +23,24 @@
     <tr>
         <td>{{user.username}}</td>
         <td>{{user.groups.all.0.name}}</td>
-        <td>{{user.is_active}}</td>
+        <td class="text-center">
+            {% if user.is_active %}
+                <i class="fas fa-check-circle" style="color: green;"></i>
+            {% else %}
+                <i class="fas fa-times-circle" style="color: red;"></i>
+            {% endif %}
+        </td>
         <td>{{user.last_login}}</td>
         <td>{{user.date_joined}}</td>
        
       
         <td>
-            <a class="btn btn-primary" href="user/{{user.rut_user}}/update" role="button">Editar</a>
-		    <!--<a class="btn btn-primary" href="user/{{user.rut_user}}" role="button">Ver</a>-->
-			<a class="btn btn-primary" href="user/{{user.rut_user}}/delete" role="button">Eliminar</a>
+            <a class="btn btn-primary" href="usuario/{{user.id}}/update" role="button">Editar</a>
+		    {% if user.is_active %}
+			    <a class="btn btn-primary" href="usuario/{{user.id}}/deactivate" role="button">Desactivar</a>
+            {% else %}
+                <a class="btn btn-primary" href="usuario/{{user.id}}/activate" role="button">Activar</a>
+            {% endif %}
         </td>
     </tr>
     {% endfor %}

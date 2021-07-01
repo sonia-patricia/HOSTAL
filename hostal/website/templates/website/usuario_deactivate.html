@@ -1,0 +1,15 @@
+{% extends "base_generic.html" %}
+{% block title %}Usuario{% endblock %}
+{% block title_main %}Mantenedor de usuarios{% endblock %}
+{% block content %}
+
+<h1>Desactivar usuario</h1>
+
+<p>Desactivar usuario {{ user.username }}?</p>
+
+<form action="" method="POST">
+    {% csrf_token %}
+    <input type="submit" action="" value="Si, desactivar"/>
+</form>
+
+{% endblock %}
