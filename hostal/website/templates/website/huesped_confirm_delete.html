@@ -1,0 +1,15 @@
+{% extends "base_generic.html" %}
+{% block title %}Huéspedes{% endblock %}
+{% block title_main %}Mantenedor de Huéspedes{% endblock %}
+{% block content %}
+
+<h1>Eliminar Huésped</h1>
+
+<p>Eliminar a {{ huesped.nombre }}?</p>
+
+<form action="" method="POST">
+    {% csrf_token %}
+    <input type="submit" action="" value="Si, eliminar."/>
+</form>
+
+{% endblock %}

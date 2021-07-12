@@ -1,17 +1,18 @@
 from django.db import models
 from django.shortcuts import render,redirect
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.views.generic.detail import DetailView
 from django.contrib import messages
 from django.contrib.auth.models import User
-
+from django.views.generic import ListView, CreateView
+from django.http import JsonResponse
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .models import Cliente, Factura, Orden_pedido, Comedor, Proveedor, Producto, Habitacion, Servicio, Empleado, Ordenesdecompra, Inventario
+from .models import Cliente, Factura, Orden_pedido, Comedor, Proveedor, Producto, Habitacion, ReservaHuesped, Servicio, Empleado, Ordenesdecompra, Inventario, Huesped, Reserva
 from django.views import generic
 from django.db.models import Q
-from .forms import UsuarioCreateForm, UsuarioUpdateForm
+from .forms import AddHuespedReserva, UsuarioCreateForm, UsuarioUpdateForm, ReservaCreateForm
 
 # Create your views here.
 @login_required(login_url='/accounts/login/')
@@ -401,3 +402,62 @@ def UsuarioActivate(request, user_id):
         return redirect('usuario_list')
     else:
         return render(request,'website/usuario_activate.html', {'user':user})
+
+#Huespedes
+class HuespedCreate(CreateView):
+    model = Huesped
+    fields = '__all__'
+
+class HuespedDelete(DeleteView):
+    model = Huesped
+    success_url = reverse_lazy('huespedes')
+
+class HuespedUpdate(UpdateView):
+    model= Huesped
+    fields = '__all__'
+
+class HuespedListView(generic.ListView):
+    model = Huesped
+    template_name = 'website/huesped_list.html'
+
+#Reservas
+class ReservaListView(generic.ListView):
+    model = Reserva
+    template_name = 'website/reserva_list.html'
+
+class ReservaCreate(CreateView):
+    template_name = 'website/reserva_create.html'
+    model = ReservaHuesped
+    fields = ['rut_huesped','habitacion']    
+    huespedes = {}
+    success_url = reverse_lazy('reservas')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        #if 'form' not in context:
+         #   context['form'] = self.form_class(self.request.GET)
+        #if 'form2' not in context:
+         #   context['form2'] = self.second_form_class(self.request.GET)
+        if 'huespedes' not in context:
+            context['huespedes'] = self.huespedes
+        print("Carga contexto")
+        return context
+
+    def render_to_response(self, context, **response_kwargs):
+        """  """
+        print("render to response")
+        if self.request.is_ajax():
+            print('Peticion AJAX')
+            data = list(context["huespedes"].values())
+            return JsonResponse({'huespedes': data})
+        else:
+            print("Renderiza")
+            response_kwargs.setdefault('content_type', self.content_type)
+            return self.response_class(
+                request=self.request,
+                template=self.get_template_names(),
+                context=context,
+                using=self.template_engine,
+                **response_kwargs
+            )
+            

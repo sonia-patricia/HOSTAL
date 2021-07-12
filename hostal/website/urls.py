@@ -87,6 +87,15 @@ urlpatterns = [
     path('inventario/<int:pk>/update', views.InventarioUpdate.as_view(), name='inventario_update'),
     path('inventario/<int:pk>/delete', views.InventarioDelete.as_view(), name='inventario_delete'),
 
+    path('huesped',views.HuespedListView.as_view(),name='huespedes'),
+    path('huesped/create', views.HuespedCreate.as_view(), name='huesped_create'),
+    path('huesped/<int:pk>/delete',views.HuespedDelete.as_view(), name='huesped_delete'),
+    path('huesped/<int:pk>/update',views.HuespedUpdate.as_view(), name='huesped_update'),
+
+    path('reserva',views.ReservaListView.as_view(),name='reservas'),
+    path('reserva/create', views.ReservaCreate.as_view(), name='reserva_create'),
+    path('reserva/<int:pk>/anular',views.HuespedDelete.as_view(), name='reserva_anular'),
+    path('reserva/<int:pk>/update',views.HuespedUpdate.as_view(), name='reserva_update'),
 
 ]
     

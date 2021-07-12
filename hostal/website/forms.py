@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import Group, User
-from django.forms.fields import Field
+from django.forms.widgets import TextInput
+from .models import Cliente, Habitacion, Huesped, Reserva, ReservaHuesped
 
 GRUPOS = [
     ('1', 'Administrador'),
@@ -92,5 +93,57 @@ class UsuarioUpdateForm(forms.ModelForm):
 
                 user.groups.add(group)
 
-            
- 
+class ReservaCreateForm(forms.ModelForm):
+
+    cliente = forms.ModelChoiceField(
+        label='Cliente',
+        queryset=Cliente.objects.all(),
+        required=True
+    )
+
+    fecha_desde = forms.DateField(
+        input_formats=['%d/%m/%Y'],
+        label='Fecha Desde',
+        widget=forms.DateInput(
+            attrs={
+                'class':'form-control',
+            }
+        )
+    )
+
+    fecha_hasta = forms.DateField(
+        input_formats=['%d/%m/%Y'],
+        label='Fecha Hasta',
+        widget=forms.DateInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    cliente.widget.attrs.update({'class':'form-control'})
+    
+    class Meta:
+        model = Reserva 
+        fields = ['fecha_desde','fecha_hasta','cliente']
+
+class AddHuespedReserva(forms.Form):
+
+    class Meta:
+        model = ReservaHuesped
+        fields = ['rut_huesped','habitacion']
+
+    rut_huesped = forms.ModelChoiceField(
+        label='Huésped',
+        queryset=Huesped.objects.all(),
+        required=True
+    )
+
+    habitacion = forms.ModelChoiceField(
+        label = 'Habitación',
+        queryset=Habitacion.objects.all(),
+        required=True
+    )
+
+    rut_huesped.widget.attrs.update({'class':'form-control mb-2 mr-sm-2'})
+    habitacion.widget.attrs.update({'class':'form-control mb-2 mr-sm-2'})

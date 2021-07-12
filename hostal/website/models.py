@@ -6,6 +6,7 @@ from django.db.models.fields import EmailField, IntegerField, BigAutoField, Date
 from django.urls import reverse
 from django.contrib.auth.models import User
 import uuid
+import datetime
 
 # Create your models here.
 
@@ -243,5 +244,37 @@ class Inventario(models.Model):
     def __str__(self):
         return str(self.codigo)
 
+class Huesped(models.Model):
+    rut_huesped = models.IntegerField(primary_key=True)
+    dv = models.CharField(max_length=1)
+    nombre = models.CharField(max_length=100)
+    telefono = models.IntegerField()
+    email = models.EmailField()
 
+    def get_absolute_url(self):
+        return reverse('huespedes')
+    
+    def __str__(self):
+        return self.nombre
+    
+class Reserva(models.Model):
+    id_reserva = models.BigAutoField(primary_key=True)
+    fecha_desde = models.DateField(default=datetime.date.today)
+    fecha_hasta = models.DateField(default=datetime.date.today)
+    vigente = models.BooleanField(default=True)
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+
+    def get_absolute_url(self):
+        return reverse('reservas')
+
+    def __str__(self):
+        return '%s, %s', self.id_reserva, self.cliente
+
+class ReservaHuesped(models.Model):
+    id_reserva = models.ForeignKey(Reserva, on_delete=models.CASCADE)
+    rut_huesped = models.ForeignKey(Huesped, null=True, on_delete=models.SET_NULL)
+    habitacion = models.ForeignKey(Habitacion, null=True, on_delete=models.SET_NULL)
+
+    def get_absolute_url(self):
+        return reverse('reservas')
 

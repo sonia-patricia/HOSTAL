@@ -1,0 +1,124 @@
+{% extends "base_generic.html" %} 
+{% block title %}Reservas{% endblock %} 
+{% block title_main %}Mantenedor de Reservas{% endblock %} 
+
+{% block content %}
+
+<h3>Crear Reserva</h3>
+<!--
+<form method="POST" class="g-3">
+  {%csrf_token%}
+
+  <div class="form-group row">
+    <div class="col-md-6">
+      <label for="id_cliente">{{ form.cliente.label }}</label>
+      {{ form.cliente }}
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <div class="col-md-3">
+      <label for="id_fecha_desde">{{ form.fecha_desde.label }}</label>
+      {{ form.fecha_desde }}
+    </div>
+    <div class="col-md-3">
+      <label for="id_fecha_hasta">{{ form.fecha_hasta.label }}</label>
+      {{ form.fecha_hasta }}
+    </div>
+  </div>
+
+  <br /><br />
+  <div class="col-md-2">
+    <button type="submit" class="btn btn-primary">Grabar Reserva</button>
+  </div>
+</form> -->
+
+<br /><br />
+<h6>Agregar Huéspedes</h6>
+<form id="form-add-huesped" method="post">
+  <div class="form-group row">
+    <div class="col-md-3">
+      <label for="id_huesped">{{ form.rut_huesped.label }}</label>
+      {{ form.rut_huesped }}
+    </div>
+    <div class="col-md-3">
+      <label for="id_habitacion">{{ form.habitacion.label }}</label>
+      {{ form.habitacion }}
+    </div>    
+  </div>
+</form>
+<button class="btn btn-primary mb-2" onclick="addHuesped()">
+  Agregar
+</button>
+
+<!--<div class="table-responsive">
+  <table id="table-huespedes" class="table table-striped table-sm">
+    <thead>
+      <tr>
+        <th>RUT</th>
+        <th>Nombre</th>
+        <th>Habitación</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>      
+        {% for huesped in huespedes %}
+        <tr>
+            <td>{{huesped.rut}}</td>
+            <td>{{huesped.nombre}}</td>
+            <td>{{huesped.habitacion}}</td>
+            <td>
+                <a class="btn btn-primary" href="{% url 'reserva_anular' reserva.pk %}" role="button">Quitar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+</div>-->
+
+<script>
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        // Does this cookie string begin with the name we want?
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  function addHuesped() {
+    var form = new FormData(document.getElementById('form-add-huesped'));
+    //var lista = document.getElementById('ul-suscriptor');
+    //
+    const csrftoken = getCookie('csrftoken');
+    fetch("/website/reserva/create", {
+    method: "POST",
+    body: form,
+    headers: {
+      "X-CSRFToken": csrftoken,
+      "X-Requested-With": "XMLHttpRequest"
+    }
+    }).then(
+      function(response) {
+        return response.json()
+      }
+    ).then(
+      function(data) {
+        console.log(data);
+          //array_sus = data.suscriptores;
+          //var li = document.createElement('li');
+          //li.innerHTML = array_sus[array_sus.length - 1].full_name + array_sus[array_sus.length - 1].email 
+          //
+          //lista.appendChild(li);
+        }
+      )
+    }
+</script>
+{% endblock %}
