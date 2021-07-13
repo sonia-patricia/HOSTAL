@@ -4,12 +4,17 @@
 
 {% block content %}
 
-<h3>Crear Reserva</h3>
+<h3>Editar Reserva</h3>
 
 <form method="POST" class="g-3">
   {%csrf_token%}
 
   <div class="form-group row">
+    <div class="col-md-3">
+      <label for="id_id_reserva">{{ form.id_reserva.label }}</label>
+      {{ form.id_reserva }}
+    </div>
+    
     <div class="col-md-6">
       <label for="id_cliente">{{ form.cliente.label }}</label>
       {{ form.cliente }}
@@ -28,7 +33,7 @@
   </div>
   <br />
   <div class="col-md-2">
-    <button type="submit" class="btn btn-primary">Crear reserva</button>
+    <button type="submit" class="btn btn-primary">Grabar</button>
   </div>
 </form> 
 {% endblock %}

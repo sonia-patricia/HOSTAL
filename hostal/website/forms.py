@@ -1,3 +1,4 @@
+from typing import Text
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import Group, User
@@ -125,24 +126,68 @@ class ReservaCreateForm(forms.ModelForm):
     
     class Meta:
         model = Reserva 
-        fields = ['fecha_desde','fecha_hasta','cliente']
+        fields = ['cliente','fecha_desde','fecha_hasta']
 
-class AddHuespedReserva(forms.Form):
+class ReservaUpdateForm(forms.ModelForm):
+
+    id_reserva = forms.IntegerField(
+        label = 'ID Reserva',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'readonly':True,
+            }
+        )
+    )
+
+    cliente = forms.ModelChoiceField(
+        label='Cliente',
+        queryset=Cliente.objects.all(),
+        required=True
+    )
+
+    fecha_desde = forms.DateField(
+        input_formats=['%d/%m/%Y'],
+        label='Fecha Desde',
+        widget=forms.DateInput(
+            attrs={
+                'class':'form-control',
+            }
+        )
+    )
+
+    fecha_hasta = forms.DateField(
+        input_formats=['%d/%m/%Y'],
+        label='Fecha Hasta',
+        widget=forms.DateInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    cliente.widget.attrs.update({'class':'form-control'})
+    
+    class Meta:
+        model = Reserva 
+        fields = ['id_reserva','cliente','fecha_desde','fecha_hasta']
+
+class AddHuespedReservaForm(forms.ModelForm):
 
     class Meta:
         model = ReservaHuesped
         fields = ['rut_huesped','habitacion']
 
     rut_huesped = forms.ModelChoiceField(
-        label='Huésped',
-        queryset=Huesped.objects.all(),
-        required=True
+        label = 'Huésped',
+        queryset = Huesped.objects.all(),
+        required  =True
     )
 
     habitacion = forms.ModelChoiceField(
         label = 'Habitación',
-        queryset=Habitacion.objects.all(),
-        required=True
+        queryset = Habitacion.objects.all(),
+        required = True
     )
 
     rut_huesped.widget.attrs.update({'class':'form-control mb-2 mr-sm-2'})

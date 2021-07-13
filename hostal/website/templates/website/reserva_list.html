@@ -25,10 +25,18 @@
         <td>{{reserva.fecha_desde}}</td>
         <td>{{reserva.fecha_hasta}}</td>
         <td>{{reserva.cliente}}</td>
-        <td>{{reserva.vigente}}</td>
         <td>
-            <a class="btn btn-primary" href="{% url 'reserva_update' reserva.pk %}" role="button">Editar</a>
-			<a class="btn btn-primary" href="{% url 'reserva_anular' reserva.pk %}" role="button">Anular</a>
+            {% if reserva.vigente == True %}
+                <i class="fas fa-check-circle" style="color: green;"></i>
+            {% else %}
+                <i class="fas fa-times-circle" style="color: red;"></i>
+            {% endif %}
+        </td>
+        <td>            
+            {% if reserva.vigente == True %}
+                <a class="btn btn-primary" href="{% url 'reserva_update' reserva.pk %}" role="button">Editar</a>
+			    <a class="btn btn-primary" href="{% url 'reserva_anular' reserva.pk %}" role="button">Anular</a>
+            {% endif %}
         </td>
     </tr>
     {% endfor %}

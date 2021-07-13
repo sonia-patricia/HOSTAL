@@ -94,8 +94,9 @@ urlpatterns = [
 
     path('reserva',views.ReservaListView.as_view(),name='reservas'),
     path('reserva/create', views.ReservaCreate.as_view(), name='reserva_create'),
-    path('reserva/<int:pk>/anular',views.HuespedDelete.as_view(), name='reserva_anular'),
-    path('reserva/<int:pk>/update',views.HuespedUpdate.as_view(), name='reserva_update'),
-
+    path('reserva/<int:pk>/anular',views.AnularReserva, name='reserva_anular'),
+    path('reserva/<int:pk>/update',views.ReservaUpdate.as_view(), name='reserva_update'),
+    path('reserva/<int:pk>/add_huesped', views.AddHuespedReserva.as_view(),name='add-huesped'),
+    path('reserva/<int:pk>/<int:pk2>/<int:pk3>/rem_huesped', views.RemHuespedReserva,name='rem-huesped'),
 ]
     

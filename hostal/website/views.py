@@ -12,7 +12,7 @@ from django.urls import reverse_lazy
 from .models import Cliente, Factura, Orden_pedido, Comedor, Proveedor, Producto, Habitacion, ReservaHuesped, Servicio, Empleado, Ordenesdecompra, Inventario, Huesped, Reserva
 from django.views import generic
 from django.db.models import Q
-from .forms import AddHuespedReserva, UsuarioCreateForm, UsuarioUpdateForm, ReservaCreateForm
+from .forms import AddHuespedReservaForm, UsuarioCreateForm, UsuarioUpdateForm, ReservaCreateForm, ReservaUpdateForm
 
 # Create your views here.
 @login_required(login_url='/accounts/login/')
@@ -427,37 +427,122 @@ class ReservaListView(generic.ListView):
 
 class ReservaCreate(CreateView):
     template_name = 'website/reserva_create.html'
-    model = ReservaHuesped
-    fields = ['rut_huesped','habitacion']    
-    huespedes = {}
-    success_url = reverse_lazy('reservas')
+    form_class = ReservaCreateForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        #if 'form' not in context:
-         #   context['form'] = self.form_class(self.request.GET)
-        #if 'form2' not in context:
-         #   context['form2'] = self.second_form_class(self.request.GET)
-        if 'huespedes' not in context:
-            context['huespedes'] = self.huespedes
-        print("Carga contexto")
+        if 'form' not in context:
+            context['form'] = self.form_class(self.request.GET)
         return context
+    
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object
 
-    def render_to_response(self, context, **response_kwargs):
-        """  """
-        print("render to response")
-        if self.request.is_ajax():
-            print('Peticion AJAX')
-            data = list(context["huespedes"].values())
-            return JsonResponse({'huespedes': data})
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            cliente = form.cleaned_data['cliente']
+            fecha_desde = form.cleaned_data['fecha_desde']
+            fecha_hasta = form.cleaned_data['fecha_hasta']
+            reserva = Reserva(cliente=cliente,fecha_desde=fecha_desde,fecha_hasta=fecha_hasta)
+            reserva.vigente = True
+
+            reserva.save()
+            print(reserva.pk)
+            return redirect('add-huesped', reserva.pk)
+
+class ReservaUpdate(UpdateView):
+    template_name = 'website/reserva_update.html'
+    form_class = ReservaUpdateForm
+    model = Reserva
+
+    def get_context_data(self, **kwargs):
+        context = super(ReservaUpdate, self).get_context_data(**kwargs)
+        pk = self.kwargs.get('pk', 0)
+        reserva = Reserva.objects.get(id_reserva=pk)
+        if 'form' not in context:
+            context['form'] = self.form_class(instance=reserva)
+        context['id'] = pk
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object
+
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            pk = self.kwargs.get('pk', 0)
+
+            reserva = Reserva.objects.get(id_reserva=pk)
+
+            reserva.cliente = form.cleaned_data['cliente']
+            reserva.fecha_desde = form.cleaned_data['fecha_desde']
+            reserva.fecha_hasta = form.cleaned_data['fecha_hasta']            
+
+            reserva.save()
+            print(reserva.pk)
+            return redirect('add-huesped', reserva.pk)
+
+def AnularReserva(request, pk):
+    reserva = Reserva.objects.get(id_reserva=pk)
+    if request.method == 'POST':
+        reserva.vigente = False
+        reserva.save()
+        return redirect('reservas')
+    else:
+        return render(request,'website/reserva_anular.html', {'reserva':reserva})
+
+class AddHuespedReserva(CreateView):
+    model=Reserva
+    second_model=ReservaHuesped
+    template_name = 'website/reserva_add_huesped.html'
+    form_class = AddHuespedReservaForm  
+    success_url = reverse_lazy('reservas')
+
+    def get_context_data(self,**kwargs):
+        context = super(AddHuespedReserva, self).get_context_data(**kwargs)
+        pk = self.kwargs.get('pk',0)
+        reserva=self.model.objects.get(id_reserva=pk)
+        huespedes=self.second_model.objects.all().filter(id_reserva=reserva.pk)
+        if 'form' not in context:
+            context['form'] = self.form_class(self.request.GET)
+        if 'huespedes' not in context:
+            context['huespedes'] = huespedes
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object
+
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            pk = self.kwargs.get('pk',0)
+            id_reserva = self.model.objects.get(id_reserva=pk)
+            rut_huesped = form.cleaned_data['rut_huesped']
+            habitacion = form.cleaned_data['habitacion']
+
+            add_huesped = ReservaHuesped(
+                id_reserva=id_reserva, 
+                rut_huesped=rut_huesped, 
+                habitacion=habitacion)
+
+            add_huesped.save()
+
+            return redirect('add-huesped', id_reserva.pk)
         else:
-            print("Renderiza")
-            response_kwargs.setdefault('content_type', self.content_type)
-            return self.response_class(
-                request=self.request,
-                template=self.get_template_names(),
-                context=context,
-                using=self.template_engine,
-                **response_kwargs
-            )
-            
+            return redirect('reservas')
+
+def RemHuespedReserva(request,**kwargs):  
+    reserva_id = kwargs.get('pk')
+    rut_huesped = kwargs.get('pk2')
+    habitacion = kwargs.get('pk3')
+
+    reserva_huesped = ReservaHuesped.objects.get(
+        id_reserva=reserva_id,
+        rut_huesped=rut_huesped,
+        habitacion=habitacion)
+    reserva_huesped.delete()
+
+    return redirect('add-huesped', reserva_id)
+
+

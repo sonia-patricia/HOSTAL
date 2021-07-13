@@ -1,0 +1,15 @@
+{% extends "base_generic.html" %}
+{% block title %}Reservas{% endblock %}
+{% block title_main %}Mantenedor de Reservas{% endblock %}
+{% block content %}
+
+<h1>Anular Reserva</h1>
+
+<p>Anular la reserva {{ reserva.id_reserva }}?</p>
+
+<form action="" method="POST">
+    {% csrf_token %}
+    <input type="submit" action="" value="Si, anular"/>
+</form>
+
+{% endblock %}

@@ -268,7 +268,7 @@ class Reserva(models.Model):
         return reverse('reservas')
 
     def __str__(self):
-        return '%s, %s', self.id_reserva, self.cliente
+        return '%s', self.id_reserva
 
 class ReservaHuesped(models.Model):
     id_reserva = models.ForeignKey(Reserva, on_delete=models.CASCADE)
