@@ -49,7 +49,6 @@ thead {
                     <td>Email</td>
                     <td>Dirección</td>
                     <td>Usuario</td>
-                    <td>Contraseña</td>
                     <td>Acciones</td>
                 </tr>
             </thead>
@@ -65,7 +64,6 @@ thead {
                     <td>{{ cliente.email }}</td>
                     <td>{{ cliente.direccion }}</td>
                     <td>{{ cliente.usuario }}</td>
-                    <td>{{ cliente.contrasenia }}</td>
     
                     <td style="text-align: center">
                         <a class="btn btn-primary" style="width: 120px; margin: 5px" href="{% url 'cliente_update' cliente.pk %}">

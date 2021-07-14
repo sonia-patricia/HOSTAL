@@ -3,7 +3,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import Group, User
 from django.forms.widgets import TextInput
-from .models import Cliente, Habitacion, Huesped, Reserva, ReservaHuesped
+from .models import Cliente, Empleado, Habitacion, Huesped, Proveedor, Reserva, ReservaHuesped, Rubro_proveedor
 
 class UsuarioCreateForm(UserCreationForm):
 
@@ -231,6 +231,382 @@ class ClienteCreateForm(forms.ModelForm):
         model  = Cliente
         fields = ['rut_cliente','dv','nombre','telefono','email','direccion']
 
+class ClienteUpdateForm(forms.ModelForm):    
 
+    rut_cliente = forms.IntegerField(
+        label = 'Rut',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'readonly':True,
+            }
+        )
+    )
 
-    
+    dv = forms.CharField(
+        label = 'Dígito Verificador',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'readonly':True,
+            }
+        )
+    )
+
+    nombre = forms.CharField(
+        label = 'Nombre',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    telefono = forms.IntegerField(
+        label = 'Teléfono',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    email = forms.EmailField(
+        label = 'E-mail',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    direccion = forms.CharField(
+        label = 'Dirección',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    class Meta:
+        model  = Cliente
+        fields = ['rut_cliente','dv','nombre','telefono','email','direccion']
+
+class ProveedorCreateForm(forms.ModelForm):    
+
+    rut_proveedor = forms.IntegerField(
+        label = 'Rut',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    dv = forms.CharField(
+        label = 'Dígito Verificador',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    nombre = forms.CharField(
+        label = 'Nombre',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    telefono = forms.IntegerField(
+        label = 'Teléfono',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    email = forms.EmailField(
+        label = 'E-mail',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    direccion = forms.CharField(
+        label = 'Dirección',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    id_rubro = forms.ModelChoiceField(
+        label = 'Rubro Proveedor',
+        queryset = Rubro_proveedor.objects.all(),
+        required  =True
+    )
+
+    id_rubro.widget.attrs.update({'class':'form-control mb-2 mr-sm-2'})
+
+    class Meta:
+        model  = Proveedor
+        fields = ['rut_proveedor','dv','nombre','telefono','email','direccion','id_rubro']
+
+class ProveedorUpdateForm(forms.ModelForm):    
+
+    rut_proveedor = forms.IntegerField(
+        label = 'Rut',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'readonly':True,
+            }
+        )
+    )
+
+    dv = forms.CharField(
+        label = 'Dígito Verificador',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'readonly':True,
+            }
+        )
+    )
+
+    nombre = forms.CharField(
+        label = 'Nombre',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    telefono = forms.IntegerField(
+        label = 'Teléfono',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    email = forms.EmailField(
+        label = 'E-mail',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    direccion = forms.CharField(
+        label = 'Dirección',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    id_rubro = forms.ModelChoiceField(
+        label = 'Rubro Proveedor',
+        queryset = Rubro_proveedor.objects.all(),
+        required  =True
+    )
+
+    id_rubro.widget.attrs.update({'class':'form-control mb-2 mr-sm-2'})
+
+    class Meta:
+        model  = Proveedor
+        fields = ['rut_proveedor','dv','nombre','telefono','email','direccion','id_rubro']
+
+class EmpleadoCreateForm(forms.ModelForm):    
+
+    rut_empleado = forms.IntegerField(
+        label = 'Rut',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    dv = forms.CharField(
+        label = 'Dígito Verificador',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    nombres = forms.CharField(
+        label = 'Nombre',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    a_paterno = forms.CharField(
+        label = 'Apellido Paterno',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    a_materno = forms.CharField(
+        label = 'Apellido Materno',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    telefono = forms.IntegerField(
+        label = 'Teléfono',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    email = forms.EmailField(
+        label = 'E-mail',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    direccion = forms.CharField(
+        label = 'Dirección',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    administrador = forms.BooleanField(
+        label = 'Administrador',
+        initial=False,
+        required=False,
+        widget=forms.CheckboxInput(
+            attrs={
+                'class':'form-check-input'
+            }
+        )
+    )
+
+    class Meta:
+        model  = Empleado
+        fields = ['rut_empleado','dv','nombres','a_paterno','a_materno','telefono','email','direccion','administrador']
+
+class EmpleadoUpdateForm(forms.ModelForm):    
+
+    rut_empleado = forms.IntegerField(
+        label = 'Rut',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'readonly':True,
+            }
+        )
+    )
+
+    dv = forms.CharField(
+        label = 'Dígito Verificador',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control',
+                'readonly':True,
+            }
+        )
+    )
+
+    nombres = forms.CharField(
+        label = 'Nombre',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    a_paterno = forms.CharField(
+        label = 'Apellido Paterno',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    a_materno = forms.CharField(
+        label = 'Apellido Materno',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    telefono = forms.IntegerField(
+        label = 'Teléfono',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    email = forms.EmailField(
+        label = 'E-mail',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    direccion = forms.CharField(
+        label = 'Dirección',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    administrador = forms.BooleanField(
+        label = 'Administrador',
+        initial=False,
+        required=False,
+        widget=forms.CheckboxInput(
+            attrs={
+                'class':'form-check-input'
+            }
+        )
+    )
+
+    class Meta:
+        model  = Empleado
+        fields = ['rut_empleado','dv','nombres','a_paterno','a_materno','telefono','email','direccion','administrador']

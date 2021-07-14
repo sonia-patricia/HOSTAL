@@ -14,7 +14,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.db.models import Q, fields
 
-from .forms import AddHuespedReservaForm, ClienteCreateForm, UsuarioCreateForm, UsuarioUpdateForm, ReservaCreateForm, ReservaUpdateForm
+from .forms import AddHuespedReservaForm, ClienteCreateForm, ClienteUpdateForm, EmpleadoCreateForm, EmpleadoUpdateForm, ProveedorCreateForm, ProveedorUpdateForm, UsuarioCreateForm, UsuarioUpdateForm, ReservaCreateForm, ReservaUpdateForm
 from .models import Cliente, Factura, Orden_pedido, Comedor, Proveedor, Producto, Habitacion, ReservaHuesped, Rubro_proveedor, Servicio, Empleado, Ordenesdecompra, Inventario, Huesped, Reserva
 
 # Create your views here.
@@ -104,16 +104,89 @@ def empleados(request):
             Q(nombres__icontains = busqueda) ).distinct()
     return render(request, 'website/empleados.html', {'empleado':empleado})
 
-class EmpleadoCreate(CreateView):
-    model = Empleado
-    fields = '__all__'
+class EmpleadoCreate(CreateView):    
     template_name = 'website/empleado_form.html'
+    form_class = EmpleadoCreateForm
+    form_user = UserCreationForm    
     success_url = reverse_lazy('empleados_list')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if 'form' not in context:
+            context['form'] = self.form_class(self.request.GET)
+        if 'form2' not in context:
+            context['form2'] = self.form_user(self.request.GET)
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object
+
+        form = self.form_class(request.POST)
+        form2 = self.form_user(request.POST)
+
+        if form.is_valid() and form2.is_valid():
+
+            form2.save() #Grabar Usuario
+            username = form2.cleaned_data['username']
+            user = User.objects.get(username=username)
+            user.is_staff = True
+            user.save()
+
+            administrador = form.cleaned_data['administrador']
+
+            if administrador == True:
+                #Agregar usuario a grupo Administrador
+                group = Group.objects.get(name='Administrador')
+            else:
+                #Agregar usuario a grupo Empleado
+                group = Group.objects.get(name='Empleado')
+            
+            user.groups.add(group)            
+
+            rut_empleado = form.cleaned_data['rut_empleado']
+            dv = form.cleaned_data['dv']
+            nombres = form.cleaned_data['nombres']
+            a_paterno = form.cleaned_data['a_paterno']
+            a_materno = form.cleaned_data['a_materno']
+            telefono = form.cleaned_data['telefono']
+            email = form.cleaned_data['email']
+            direccion = form.cleaned_data['direccion']
+            
+            
+            empleado = Empleado(
+                rut_empleado=rut_empleado,
+                dv=dv,
+                nombres=nombres,
+                a_paterno=a_paterno,
+                a_materno=a_materno,
+                telefono=telefono,
+                email=email,
+                direccion=direccion,
+                administrador=administrador,
+                usuario=user)
+            
+            empleado.save()
+
+            return redirect('empleados_list')
+        
+        else:
+            args = {'form':form,'form2':form2}
+            return render(request, 'website/empleado_form.html',args)
+
 class EmpleadoUpdate(UpdateView):
+    template_name = 'website/empleado_update.html'
+    form_class = EmpleadoUpdateForm
     model = Empleado
-    fields = '__all__'
-    success_url = reverse_lazy('empleados_list')
+    
+    def get_context_data(self, **kwargs):
+        context = super(EmpleadoUpdate, self).get_context_data(**kwargs)
+        pk = self.kwargs.get('pk',0)
+        empleado = Empleado.objects.get(rut_empleado=pk)
+        if 'form' not in context:
+            context['form'] = self.form_class(instance=empleado)
+        context['id'] = pk
+        return context
+
 
 class EmpleadoDelete(DeleteView):
     model = Empleado
@@ -228,12 +301,12 @@ class ClienteCreate(CreateView):
     success_url = reverse_lazy('clientes_list')
 
     def get_context_data(self, **kwargs):
-            context = super().get_context_data(**kwargs)
-            if 'form' not in context:
-                context['form'] = self.form_class(self.request.GET)
-            if 'form2' not in context:
-                context['form2'] = self.form_user(self.request.GET)
-            return context
+        context = super().get_context_data(**kwargs)
+        if 'form' not in context:
+            context['form'] = self.form_class(self.request.GET)
+        if 'form2' not in context:
+            context['form2'] = self.form_user(self.request.GET)
+        return context
     
     def post(self, request, *args, **kwargs):
         self.object = self.get_object
@@ -270,12 +343,24 @@ class ClienteCreate(CreateView):
             cliente.save()            
 
             return redirect('clientes_list')
+        
+        else:
+            args = {'form':form,'form2':form2}
+            return render(request, 'website/cliente_form.html',args)
 
 class ClienteUpdate(UpdateView):
+    template_name = 'website/cliente_update.html'
+    form_class = ClienteUpdateForm
     model = Cliente
-    #fields = ['nombre','telefono','email','direccion','usuario','contrasenia']    
-    fields = '__all__'
-    success_url = reverse_lazy('clientes_list')
+
+    def get_context_data(self, **kwargs):
+        context = super(ClienteUpdate, self).get_context_data(**kwargs)
+        pk = self.kwargs.get('pk',0)
+        cliente = Cliente.objects.get(rut_cliente=pk)
+        if 'form' not in context:
+            context['form'] = self.form_class(instance=cliente)
+        context['id'] = pk
+        return context
 
 class ClienteDelete(DeleteView):
     model = Cliente
@@ -313,9 +398,78 @@ class HabitacionDelete(DeleteView):
 
 
 
-class ProveedorCreate(CreateView):
+class ProveedorCreate(CreateView):    
+    template_name = 'website/proveedor_form.html'
+    form_class = ProveedorCreateForm
+    form_user = UserCreationForm    
+    success_url = reverse_lazy('proveedores')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if 'form' not in context:
+            context['form'] = self.form_class(self.request.GET)
+        if 'form2' not in context:
+            context['form2'] = self.form_user(self.request.GET)
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object
+
+        form = self.form_class(request.POST)
+        form2 = self.form_user(request.POST)
+
+        if form.is_valid() and form2.is_valid():
+
+            form2.save() #Grabar Usuario
+            username = form2.cleaned_data['username']
+            user = User.objects.get(username=username)
+
+            #Agregar usuario a grupo Cliente
+            group = Group.objects.get(name='Proveedor')
+            user.groups.add(group)
+
+            rut_proveedor = form.cleaned_data['rut_proveedor']
+            dv = form.cleaned_data['dv']
+            nombre = form.cleaned_data['nombre']
+            telefono = form.cleaned_data['telefono']
+            email = form.cleaned_data['email']
+            direccion = form.cleaned_data['direccion']
+            id_rubro = form.cleaned_data['id_rubro']
+
+            proveedor = Proveedor(
+                rut_proveedor=rut_proveedor,
+                dv=dv,
+                nombre=nombre,
+                telefono=telefono,
+                email=email,
+                direccion=direccion,
+                id_rubro=id_rubro,
+                usuario=user)
+            
+            proveedor.save()            
+
+            return redirect('proveedores')
+        
+        else:
+            print('no valid')
+            print(form.errors)
+            print(form2.errors)
+            args = {'form':form,'form2':form2}
+            return render(request, 'website/proveedor_form.html',args)
+
+class ProveedorUpdate(UpdateView):
+    template_name = 'website/proveedor_update.html'
+    form_class = ProveedorUpdateForm
     model = Proveedor
-    fields = '__all__'
+    
+    def get_context_data(self, **kwargs):
+        context = super(ProveedorUpdate, self).get_context_data(**kwargs)
+        pk = self.kwargs.get('pk',0)
+        proveedor = Proveedor.objects.get(rut_proveedor=pk)
+        if 'form' not in context:
+            context['form'] = self.form_class(instance=proveedor)
+        context['id'] = pk
+        return context    
 
 class ProveedorDetailView(generic.DetailView):
     model = Proveedor
@@ -323,10 +477,6 @@ class ProveedorDetailView(generic.DetailView):
 class ProveedorDelete(DeleteView):
     model = Proveedor
     success_url = reverse_lazy('proveedores')
-
-class ProveedorUpdate(UpdateView):
-    model= Proveedor
-    fields = '__all__'
 
 class ProveedorListView(generic.ListView):
     model = Proveedor

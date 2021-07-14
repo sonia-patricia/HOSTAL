@@ -51,7 +51,7 @@ thead {
                     <td>Email</td>
                     <td>Dirección</td>
                     <td>Usuario</td>
-                    <td>Contraseña</td>
+                    <td>Admin</td>
                     <td>Acciones</td>
                 </tr>
             </thead>
@@ -69,7 +69,7 @@ thead {
                     <td>{{ empleado.email }}</td>
                     <td>{{ empleado.direccion }}</td>
                     <td>{{ empleado.usuario }}</td>
-                    <td>{{ empleado.contrasenia }}</td>
+                    <td>{{ empleado.administrador }}</td>
     
                     <td style="text-align: center">
                         <a class="btn btn-primary" style="width: 120px; margin: 5px" href="{% url 'empleado_update' empleado.pk %}">

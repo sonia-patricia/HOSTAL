@@ -60,12 +60,10 @@ class Cliente(models.Model):
     telefono = models.IntegerField()
     email = models.CharField(max_length=25)
     direccion = models.CharField(max_length=25)
-    #usuario = models.CharField(max_length=25)
-    #contrasenia = models.CharField(max_length=8)
     usuario = models.OneToOneField(User,on_delete=models.CASCADE, null=True)
 
     def get_absolute_url(self):
-        return reverse('cliente-detail', args=[str(self.id)])
+        return reverse('clientes_list')
 
     def __str__(self):
         return self.nombre
@@ -155,14 +153,11 @@ class Empleado(models.Model):
     telefono = models.IntegerField()
     email = models.CharField(max_length=25)
     direccion = models.CharField(max_length=50)
-    #usuario = models.CharField(max_length=25)
-    #contrasenia = models.CharField(max_length=8)
+    administrador = models.BooleanField(default=False,null=False)
     usuario = models.OneToOneField(User,on_delete=models.CASCADE, null=True)
-    #id_empleado = models.ForeignKey(Tipo_empleado,on_delete=models.CASCADE)
-    #rut_hostal = models.ForeignKey(Hostal,on_delete=models.CASCADE)
 
     def get_absolute_url(self):
-        return reverse('empleado-detail', args=[str(self.id)])
+        return reverse('empleados_list')
 
     def __str__(self):
         return self.nombres

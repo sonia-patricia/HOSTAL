@@ -18,6 +18,7 @@
         <th>Email</th>
         <th>Direccion</th>
         <th>Rubro</th>
+        <th>Usuario</th>
         <th>Acciones</th>
     </tr>
     </thead>
@@ -31,11 +32,11 @@
         <td>{{proveedor.email}}</td>
         <td>{{proveedor.direccion}}</td>        
         <td>{{proveedor.id_rubro}}</td>
+        <td>{{proveedor.usuario}}</td>
       
         <td>
-            <a class="btn btn-primary" href="proveedor/{{proveedor.rut_proveedor}}/update" role="button">Editar</a>
-		    <!--<a class="btn btn-primary" href="proveedor/{{proveedor.rut_proveedor}}" role="button">Ver</a>-->
-			<a class="btn btn-primary" href="proveedor/{{proveedor.rut_proveedor}}/delete" role="button">Eliminar</a>
+            <a class="btn btn-primary" href="{% url 'proveedor_update' proveedor.pk %}" role="button">Editar</a>
+			<a class="btn btn-primary" href="{% url 'proveedor_delete' proveedor.pk %}" role="button">Eliminar</a>
         </td>
     </tr>
     {% endfor %}
