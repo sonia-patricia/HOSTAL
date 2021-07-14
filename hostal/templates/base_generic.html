@@ -186,7 +186,7 @@
             <a class="nav-link" href="{% url 'usuario_list' %}">
               <span data-feather="file-text"></span>
               <i class="fas fa-user"></i>
-              Usuarios
+              Usuarios y Grupos
             </a>
           </li>
           {% endif %}
@@ -199,6 +199,13 @@
             </a>
           </li>
           {% endif %}
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="{% url 'cambiar_clave' %}">
+              <span data-feather="home"></span>
+              <i class="fas fa-key"></i>
+              Cambiar Clave
+            </a>
+          </li>
         </ul>
       </div>
     </nav>

@@ -18,6 +18,9 @@ class Rubro_proveedor(models.Model):
     def __str__(self):
         return self.rubro
 
+    def get_absolute_url(self):
+        return reverse('rubros_proveedor')
+
 class Proveedor(models.Model):
     rut_proveedor = models.IntegerField(primary_key=True)
     dv = models.CharField(max_length=1, null=False)
@@ -268,7 +271,7 @@ class Reserva(models.Model):
         return reverse('reservas')
 
     def __str__(self):
-        return '%s', self.id_reserva
+        return str(self.id_reserva)
 
 class ReservaHuesped(models.Model):
     id_reserva = models.ForeignKey(Reserva, on_delete=models.CASCADE)

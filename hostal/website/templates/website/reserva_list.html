@@ -32,7 +32,8 @@
                 <i class="fas fa-times-circle" style="color: red;"></i>
             {% endif %}
         </td>
-        <td>            
+        <td>
+            <a class="btn btn-primary" href="{% url 'reserva_detail' reserva.pk %}" role="button">Visualizar</a>        
             {% if reserva.vigente == True %}
                 <a class="btn btn-primary" href="{% url 'reserva_update' reserva.pk %}" role="button">Editar</a>
 			    <a class="btn btn-primary" href="{% url 'reserva_anular' reserva.pk %}" role="button">Anular</a>

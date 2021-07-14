@@ -7,6 +7,7 @@ from . import views
 
 urlpatterns = [
     path('home', views.home, name='home'),
+    path('cambiar_clave', views.ChangePasswordView, name='cambiar_clave'),
 
     path('clientes', views.clientes, name='clientes'),
     path('clientes/list', views.ClienteListView.as_view(), name='clientes_list'),
@@ -26,6 +27,11 @@ urlpatterns = [
     #path('proveedor/<int:pk>', views.ProveedorDetailView.as_view(), name='proveedor_detail'),
     path('proveedor/<int:pk>/delete',views.ProveedorDelete.as_view(), name='proveedor_delete'),
     path('proveedor/<int:pk>/update',views.ProveedorUpdate.as_view(), name='proveedor_update'),
+
+    path('proveedor/rubro', views.RubroProveedorListView.as_view(), name='rubros_proveedor'),
+    path('proveedor/rubro/create', views.RubroProveedorCreateView.as_view(), name='rubro_create'),
+    path('proveedor/rubro/<int:pk>/update', views.RubroProveedorUpdateView.as_view(), name='rubro_update'),
+    path('proveedor/rubro/<int:pk>/delete', views.RubroProveedorDeleteView.as_view(), name='rubro_delete'),
 
     path('orden_pedido',views.Orden_pedidoListView.as_view(), name='orden_pedido'),
     path('orden_pedido/create', views.Orden_pedidoCreate.as_view(), name='orden_pedido_create'),
@@ -47,6 +53,11 @@ urlpatterns = [
     path('usuario/<int:user_id>/update', views.UsuarioUpdate,name='usuario_update'),
     path('usuario/<int:user_id>/deactivate', views.UsuarioDeactivate,name='usuario_deactivate'),
     path('usuario/<int:user_id>/activate', views.UsuarioActivate,name='usuario_activate'),
+
+    path('usuario/grupo', views.GrupoListView.as_view(), name='groups_list'),
+    path('usuario/grupo/create', views.GrupoCreateView.as_view(), name='group_create'),
+    path('usuario/grupo/<int:pk>/update', views.GrupoUpdateView.as_view(), name='group_update'),
+    path('usuario/grupo/<int:pk>/delete', views.GrupoDeleteView.as_view(), name='group_delete'),
     
     #JUAN
     path('empleados',views.empleados,name='empleados'),
@@ -94,6 +105,7 @@ urlpatterns = [
 
     path('reserva',views.ReservaListView.as_view(),name='reservas'),
     path('reserva/create', views.ReservaCreate.as_view(), name='reserva_create'),
+    path('reserva/<int:pk>/detail',views.DetalleReserva.as_view(), name='reserva_detail'),
     path('reserva/<int:pk>/anular',views.AnularReserva, name='reserva_anular'),
     path('reserva/<int:pk>/update',views.ReservaUpdate.as_view(), name='reserva_update'),
     path('reserva/<int:pk>/add_huesped', views.AddHuespedReserva.as_view(),name='add-huesped'),

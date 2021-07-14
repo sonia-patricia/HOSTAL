@@ -5,17 +5,10 @@ from django.contrib.auth.models import Group, User
 from django.forms.widgets import TextInput
 from .models import Cliente, Habitacion, Huesped, Reserva, ReservaHuesped
 
-GRUPOS = [
-    ('1', 'Administrador'),
-    ('2', 'Empleado'),
-    ('3', 'Cliente'),
-    ('4','Proveedor')
-]
-
 class UsuarioCreateForm(UserCreationForm):
 
-    grupo_usuario = forms.ChoiceField(
-        choices=GRUPOS,
+    grupo_usuario = forms.ModelChoiceField(
+        queryset=Group.objects.all(),
         required=True,
     )
     
@@ -60,9 +53,8 @@ class UsuarioUpdateForm(forms.ModelForm):
         )        
     )
 
-    grupo_usuario = forms.ChoiceField(
-        label='Grupo usuario',
-        choices=GRUPOS,
+    grupo_usuario = forms.ModelChoiceField(
+        queryset=Group.objects.all(),
         required=True,
     )    
 

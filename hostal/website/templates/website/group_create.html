@@ -1,0 +1,22 @@
+{% extends "base_generic.html" %}
+{% block title %}Grupos{% endblock %}
+{% block title_main %}Mantenedor de grupos{% endblock %}
+
+{% block content %}
+
+{% url 'group_create' as the_url %}
+{% if request.get_full_path == the_url %}
+    <h3>Crear Grupo</h3>
+{% else %}
+    <h3>Actualizar Grupo</h3>
+{% endif %}
+<form method="post" class="row g-3">
+    {%csrf_token%}
+    {% load crispy_forms_tags %}
+    {{ form|crispy }}
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary">Grabar</button>
+    </div>
+</form>
+
+{% endblock %}

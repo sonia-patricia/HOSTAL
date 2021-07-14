@@ -1,18 +1,21 @@
+from django.contrib.auth import update_session_auth_hash
 from django.db import models
 from django.shortcuts import render,redirect
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.views.generic.detail import DetailView
 from django.contrib import messages
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Group, User
+from django.contrib.auth.forms import PasswordChangeForm
 from django.views.generic import ListView, CreateView
 from django.http import JsonResponse
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .models import Cliente, Factura, Orden_pedido, Comedor, Proveedor, Producto, Habitacion, ReservaHuesped, Servicio, Empleado, Ordenesdecompra, Inventario, Huesped, Reserva
 from django.views import generic
-from django.db.models import Q
+from django.db.models import Q, fields
+
 from .forms import AddHuespedReservaForm, UsuarioCreateForm, UsuarioUpdateForm, ReservaCreateForm, ReservaUpdateForm
+from .models import Cliente, Factura, Orden_pedido, Comedor, Proveedor, Producto, Habitacion, ReservaHuesped, Rubro_proveedor, Servicio, Empleado, Ordenesdecompra, Inventario, Huesped, Reserva
 
 # Create your views here.
 @login_required(login_url='/accounts/login/')
@@ -285,6 +288,23 @@ class ProveedorListView(generic.ListView):
     model = Proveedor
     template_name = 'website/proveedor_list.html'
 
+#Rubro Proveedor
+class RubroProveedorListView(generic.ListView):
+    model = Rubro_proveedor
+    template_name = 'website/rubro_proveedor_list.html'
+
+class RubroProveedorCreateView(CreateView):
+    model = Rubro_proveedor
+    fields = ['rubro','descripcion']
+
+class RubroProveedorUpdateView(UpdateView):
+    model = Rubro_proveedor
+    fields = ['rubro','descripcion']
+    success_url = reverse_lazy('rubros_proveedor')
+
+class RubroProveedorDeleteView(DeleteView):
+    model = Rubro_proveedor
+    success_url = reverse_lazy('rubros_proveedor')
 
 #Producto CRUD
 class ProductoCreate(CreateView):
@@ -483,6 +503,27 @@ class ReservaUpdate(UpdateView):
             print(reserva.pk)
             return redirect('add-huesped', reserva.pk)
 
+class DetalleReserva(DetailView):
+    model = Reserva
+    template_name = 'website/reserva_detail.html'
+    form_class = ReservaUpdateForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        pk = self.kwargs.get('pk', 0)
+        reserva = Reserva.objects.get(id_reserva=pk)
+        huespedes=ReservaHuesped.objects.all().filter(id_reserva=reserva.pk)
+        if 'form' not in context:
+            context['form'] = self.form_class(instance=reserva)
+        if 'reserva' not in context:
+            context['reserva'] = reserva
+        if 'huespedes' not in context:
+            context['huespedes'] = huespedes        
+        context['id'] = pk
+        
+        return context
+
+
 def AnularReserva(request, pk):
     reserva = Reserva.objects.get(id_reserva=pk)
     if request.method == 'POST':
@@ -545,4 +586,37 @@ def RemHuespedReserva(request,**kwargs):
 
     return redirect('add-huesped', reserva_id)
 
+def ChangePasswordView(request):
+    if request.method == 'POST':
+        form=PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            return redirect('home')
+        else:
+            return redirect('cambiar_clave')
+    else:
+        form = PasswordChangeForm(user=request.user)
+        args = {'form':form}
+        return render(request, 'accounts/change_password.html',args)
 
+class GrupoListView(ListView):
+    model = Group
+    template_name = 'website/group_list.html'
+
+class GrupoCreateView(CreateView):
+    model = Group
+    fields = ['name']
+    template_name = 'website/group_create.html'
+    success_url = reverse_lazy('groups_list')
+
+class GrupoUpdateView(UpdateView):
+    model = Group
+    fields = ['name']
+    template_name = 'website/group_create.html'
+    success_url = reverse_lazy('groups_list')
+
+class GrupoDeleteView(DeleteView):
+    model = Group
+    template_name = 'website/group_confirm_delete.html'
+    success_url = reverse_lazy('groups_list')
