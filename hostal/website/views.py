@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic.detail import DetailView
 from django.contrib import messages
 from django.contrib.auth.models import Group, User
-from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
 from django.views.generic import ListView, CreateView
 from django.http import JsonResponse
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -14,7 +14,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.db.models import Q, fields
 
-from .forms import AddHuespedReservaForm, UsuarioCreateForm, UsuarioUpdateForm, ReservaCreateForm, ReservaUpdateForm
+from .forms import AddHuespedReservaForm, ClienteCreateForm, UsuarioCreateForm, UsuarioUpdateForm, ReservaCreateForm, ReservaUpdateForm
 from .models import Cliente, Factura, Orden_pedido, Comedor, Proveedor, Producto, Habitacion, ReservaHuesped, Rubro_proveedor, Servicio, Empleado, Ordenesdecompra, Inventario, Huesped, Reserva
 
 # Create your views here.
@@ -221,11 +221,55 @@ class Orden_pedidoListView(generic.ListView):
 
 
 
-class ClienteCreate(CreateView):
-    model = Cliente
-    fields = '__all__'
+class ClienteCreate(CreateView):    
     template_name = 'website/cliente_form.html'
+    form_class = ClienteCreateForm
+    form_user = UserCreationForm    
     success_url = reverse_lazy('clientes_list')
+
+    def get_context_data(self, **kwargs):
+            context = super().get_context_data(**kwargs)
+            if 'form' not in context:
+                context['form'] = self.form_class(self.request.GET)
+            if 'form2' not in context:
+                context['form2'] = self.form_user(self.request.GET)
+            return context
+    
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object
+
+        form = self.form_class(request.POST)
+        form2 = self.form_user(request.POST)
+
+        if form.is_valid() and form2.is_valid():
+
+            form2.save() #Grabar Usuario
+            username = form2.cleaned_data['username']
+            user = User.objects.get(username=username)
+
+            #Agregar usuario a grupo Cliente
+            group = Group.objects.get(name='Cliente')
+            user.groups.add(group)
+
+            rut_cliente = form.cleaned_data['rut_cliente']
+            dv = form.cleaned_data['dv']
+            nombre = form.cleaned_data['nombre']
+            telefono = form.cleaned_data['telefono']
+            email = form.cleaned_data['email']
+            direccion = form.cleaned_data['direccion']
+
+            cliente = Cliente(
+                rut_cliente=rut_cliente,
+                dv=dv,
+                nombre=nombre,
+                telefono=telefono,
+                email=email,
+                direccion=direccion,
+                usuario=user)
+            
+            cliente.save()            
+
+            return redirect('clientes_list')
 
 class ClienteUpdate(UpdateView):
     model = Cliente
@@ -365,7 +409,7 @@ def UsuarioCreate(request):
     if request.method == 'POST':
         if not User.objects.filter(username = request.POST['username']).exists():
             form = UsuarioCreateForm(request.POST)
-            if form.is_valid():                
+            if form.is_valid():
                 grupo = int(request.POST['grupo_usuario'])
                 if form.save(commit=False):
                     form.save(commit=True, grupo_usuario=grupo)
@@ -387,15 +431,9 @@ def UsuarioUpdate(request, user_id):
         return redirect('usuario_list')
                 
     else:        
-        grupo_usuario = 0
-        if user.groups.filter(name='Administrador').exists():
-            grupo_usuario = 1
-        elif user.groups.filter(name='Empleado').exists():
-            grupo_usuario = 2
-        elif user.groups.filter(name='Cliente').exists():
-            grupo_usuario = 3
-        elif user.groups.filter(name='Proveedor').exists():
-            grupo_usuario = 4
+        
+        group = user.groups.all()[0]
+        grupo_usuario = group.id
 
         form = UsuarioUpdateForm(
             initial={

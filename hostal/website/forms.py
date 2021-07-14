@@ -1,4 +1,4 @@
-from typing import Text
+from typing import AbstractSet, Text
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import Group, User
@@ -26,14 +26,7 @@ class UsuarioCreateForm(UserCreationForm):
         user = super().save(commit=False)
         if commit:
             if super().save(commit=True):
-                if grupo_usuario == 1:
-                    group = Group.objects.get(name='Administrador')
-                elif grupo_usuario == 2:
-                    group = Group.objects.get(name='Empleado')
-                elif grupo_usuario == 3:
-                    group = Group.objects.get(name='Cliente')       
-                elif grupo_usuario == 4:
-                    group = Group.objects.get(name='Proveedor')
+                group = Group.objects.get(id=grupo_usuario)
 
                 user.groups.add(group)
 
@@ -75,14 +68,7 @@ class UsuarioUpdateForm(forms.ModelForm):
                 
                 user.groups.clear()
 
-                if grupo_usuario == 1:
-                    group = Group.objects.get(name='Administrador')
-                elif grupo_usuario == 2:
-                    group = Group.objects.get(name='Empleado')
-                elif grupo_usuario == 3:
-                    group = Group.objects.get(name='Cliente')       
-                elif grupo_usuario == 4:
-                    group = Group.objects.get(name='Proveedor')
+                group = Group.objects.get(id=grupo_usuario)
 
                 user.groups.add(group)
 
@@ -184,3 +170,67 @@ class AddHuespedReservaForm(forms.ModelForm):
 
     rut_huesped.widget.attrs.update({'class':'form-control mb-2 mr-sm-2'})
     habitacion.widget.attrs.update({'class':'form-control mb-2 mr-sm-2'})
+
+class ClienteCreateForm(forms.ModelForm):    
+
+    rut_cliente = forms.IntegerField(
+        label = 'Rut',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    dv = forms.CharField(
+        label = 'Dígito Verificador',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    nombre = forms.CharField(
+        label = 'Nombre',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    telefono = forms.IntegerField(
+        label = 'Teléfono',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    email = forms.EmailField(
+        label = 'E-mail',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    direccion = forms.CharField(
+        label = 'Dirección',
+        widget=forms.TextInput(
+            attrs={
+                'class':'form-control'
+            }
+        )
+    )
+
+    class Meta:
+        model  = Cliente
+        fields = ['rut_cliente','dv','nombre','telefono','email','direccion']
+
+
+
+    
