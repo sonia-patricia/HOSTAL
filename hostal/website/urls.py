@@ -7,6 +7,8 @@ from . import views
 
 urlpatterns = [
     path('home', views.home, name='home'),
+    path('index', views.index, name='index'),
+    path('habs', views.habs, name='habs'),
     path('cambiar_clave', views.ChangePasswordView, name='cambiar_clave'),
 
     path('clientes', views.clientes, name='clientes'),
@@ -21,6 +23,7 @@ urlpatterns = [
     path('habitaciones/list', views.HabitacionListView.as_view(), name='habitaciones_list'),
     path('habitacion/<int:pk>/update', views.HabitacionUpdate.as_view(), name='habitacion_update'),
     path('habitacion/<int:pk>/delete', views.HabitacionDelete.as_view(), name='habitacion_delete'),
+    path('habitaciones/pdf', views.ListHabitacionesPdf.as_view(), name='habitaciones_pdf'),
 
     path('proveedor',views.ProveedorListView.as_view(), name='proveedores'),
     path('proveedor/create', views.ProveedorCreate.as_view(), name='proveedor_create'),
@@ -98,10 +101,12 @@ urlpatterns = [
     path('inventario/<int:pk>/update', views.InventarioUpdate.as_view(), name='inventario_update'),
     path('inventario/<int:pk>/delete', views.InventarioDelete.as_view(), name='inventario_delete'),
 
-    path('huesped',views.HuespedListView.as_view(),name='huespedes'),
+    path('huesped', views.huespedes, name='huespedes'),
+    path('huesped',views.HuespedListView.as_view(),name='huesped_list'),
     path('huesped/create', views.HuespedCreate.as_view(), name='huesped_create'),
     path('huesped/<int:pk>/delete',views.HuespedDelete.as_view(), name='huesped_delete'),
     path('huesped/<int:pk>/update',views.HuespedUpdate.as_view(), name='huesped_update'),
+    path('huespedes/pdf', views.ListHuespedesPdf.as_view(), name='huespedes_pdf'),
 
     path('reserva',views.ReservaListView.as_view(),name='reservas'),
     path('reserva/create', views.ReservaCreate.as_view(), name='reserva_create'),

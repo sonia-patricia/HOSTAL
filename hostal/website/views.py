@@ -1,3 +1,4 @@
+from website.utils import render_to_pdf
 from django.contrib.auth import update_session_auth_hash
 from django.db import models
 from django.shortcuts import render,redirect
@@ -7,7 +8,7 @@ from django.views.generic.detail import DetailView
 from django.contrib import messages
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, View
 from django.http import JsonResponse
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
@@ -22,6 +23,11 @@ from .models import Cliente, Factura, Orden_pedido, Comedor, Proveedor, Producto
 def home(request):
     return render(request, 'website/home.html')
 
+def index(request):
+    return render(request, 'website/index.html')  
+
+def habs(request):
+    return render(request, 'website/habs.html')     
 
 def clientes(request):
     busqueda = request.GET.get("buscar")
@@ -45,6 +51,17 @@ def habitaciones(request):
         ).distinct()
 
     return render(request, 'website/habitaciones.html', {'habitacion':habitacion})  
+
+def huespedes(request):
+    busqueda = request.GET.get("buscar")
+    huesped = Huesped.objects.all()
+
+    if busqueda:
+        huesped = Huesped.objects.filter(
+            Q(rut_huesped__icontains = busqueda)
+        ).distinct()
+
+    return render(request, 'website/huespedes.html', {'huesped':huesped})      
       
 # vista producto
 def producto(request):
@@ -395,7 +412,15 @@ class HabitacionDelete(DeleteView):
     model = Habitacion
     success_url = reverse_lazy('habitaciones_list')      
     
-
+class ListHabitacionesPdf(View):
+    def get(self, request, *args, **kwargs):
+        habitaciones = Habitacion.objects.all()
+        data = {
+            'habitaciones': habitaciones,
+            'cantidad': habitaciones.count()
+        }
+        pdf = render_to_pdf('website/lista_hab.html', data)
+        return HttpResponse(pdf, content_type='aplications/pdf')   
 
 
 class ProveedorCreate(CreateView):    
@@ -627,6 +652,16 @@ class HuespedUpdate(UpdateView):
 class HuespedListView(generic.ListView):
     model = Huesped
     template_name = 'website/huesped_list.html'
+
+class ListHuespedesPdf(View):
+    def get(self, request, *args, **kwargs):
+        huespedes = Huesped.objects.all()
+        data = {
+            'huespedes': huespedes,
+            'cantidad': huespedes.count()
+        }
+        pdf = render_to_pdf('website/lista_hue.html', data)
+        return HttpResponse(pdf, content_type='aplications/pdf')     
 
 #Reservas
 class ReservaListView(generic.ListView):

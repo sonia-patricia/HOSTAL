@@ -84,7 +84,9 @@ habitacion_tipo_cama = [
 
 habitacion_tipo= [
     ('Individual', 'Individual'),
-    ('Doble', 'Doble')
+    ('Individual Premium', 'Individual Premium'),
+    ('Doble', 'Doble'),
+    ('Loft', 'Loft')
 ]
 
 class Habitacion(models.Model):

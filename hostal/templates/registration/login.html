@@ -41,19 +41,23 @@
   </head>
   <body class="text-center">
     
-<main class="form-signin">
+<main class="form-signin shadow" style="background-color: #f8f9fa;">
    
     <form class="form-signin" action="{% url 'login' %}" method="POST">
         {% csrf_token %}
-        <img class="mb-4" src="{% static 'img/logo-hostal.png' %}" alt="" width="300" height="300">
-        <h1 class="h3 mb-3 font-weight-normal">Ingreso al portal</h1>
+        <img class="mb-4" src="{% static 'img/logo-hostal2.png' %}" alt="" width="300" style="padding-right: 28px;">
+        <h1 class="h3 mb-4 font-weight-normal">Ingreso al portal</h1>
         
         {% load widget_tweaks %}
 
-        {% render_field form.username placeholder=form.username.label class+="form-control" %}
-        {% render_field form.password placeholder=form.password.label class+="form-control" %}
+        <div class="mb-2">
+          {% render_field form.username placeholder=form.username.label class+="form-control" %}     
+        </div>
+        <div>
+          {% render_field form.password placeholder=form.password.label class+="form-control" %}
+        </div>
 
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Ingresar</button>
+        <button class="btn btn-lg btn-primary btn-block mt-2" type="submit" style="width: 100%;">Ingresar</button>
 
         
         {% if form.errors %}
