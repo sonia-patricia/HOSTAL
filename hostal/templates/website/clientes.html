@@ -42,17 +42,20 @@
         </div>
     </div>
     <br>
-    <form class="d-none d-sm-block mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" 
-    method="GET" style="width: 255px">
-        <div class="input-group">
-            <input type="text" class="form-control bg-light border-0 small" placeholder="Buscar..." name="buscar" value="">
-            <div class="input-group-append">
-                <button class="btn btn-primary" type="submit">
-                    <i class="fas fa-search fa-sm"></i>
-                </button>
+    <div style="margin-bottom: 100%;">
+        <form class="d-none d-sm-block mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" 
+        method="GET" style="width: 255px">
+            <div class="input-group">
+                <input type="text" class="form-control bg-light border-0 small" placeholder="Buscar..." name="buscar" value="">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fas fa-search fa-sm"></i>
+                    </button>
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
+
     <br>
     {% url 'clientes' as the_url %}
     {% if request.get_full_path != the_url %}
