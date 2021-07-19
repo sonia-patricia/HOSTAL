@@ -661,7 +661,15 @@ class ListHuespedesPdf(View):
             'cantidad': huespedes.count()
         }
         pdf = render_to_pdf('website/lista_hue.html', data)
-        return HttpResponse(pdf, content_type='aplications/pdf')     
+
+        if pdf:
+            response = HttpResponse(pdf, content_type='aplications/pdf')
+            filename = "lista_huespedes.pdf"
+            content  = "inline; filename=%s" %(filename)
+            response['Content-Disposition'] = content
+            return response
+
+        return HttpResponse("Not Found")
 
 #Reservas
 class ReservaListView(generic.ListView):

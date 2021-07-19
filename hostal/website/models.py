@@ -192,7 +192,7 @@ class Servicio(models.Model):
         return reverse('servicio-detail', args=[str(self.id)])
 
     def __str__(self):
-        return self.codigo_servicio
+        return "%s - %s" % (self.codigo_servicio, self.tipo)
 
 class Comedor(models.Model):
     codigo_plato = models.IntegerField(primary_key=True, help_text='')

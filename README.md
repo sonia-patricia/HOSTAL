@@ -1,2 +1,0 @@
-# HOSTAL
-hostal doña clarita
