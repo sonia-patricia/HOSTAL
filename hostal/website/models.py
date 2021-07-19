@@ -56,10 +56,10 @@ class Cliente(models.Model):
 
     rut_cliente = models.IntegerField(primary_key=True, help_text='')
     dv = models.CharField(max_length=1)
-    nombre = models.CharField(max_length=25)
+    nombre = models.CharField(max_length=100)
     telefono = models.IntegerField()
-    email = models.CharField(max_length=25)
-    direccion = models.CharField(max_length=25)
+    email = models.CharField(max_length=100)
+    direccion = models.CharField(max_length=100)
     usuario = models.OneToOneField(User,on_delete=models.CASCADE, null=True)
 
     def get_absolute_url(self):
@@ -120,7 +120,7 @@ class Habitacion(models.Model):
 class Producto(models.Model):
 
     codigo_producto = models.IntegerField(primary_key=True, help_text='')
-    nombre = models.CharField(max_length=25)
+    nombre = models.CharField(max_length=100)
     familia=models.CharField(max_length=50)
     descripcion = models.CharField(max_length=250)
     fecha_elaboracion =models.DateField(default=timezone.now)
@@ -149,12 +149,12 @@ class Empleado(models.Model):
 
     rut_empleado = models.IntegerField(primary_key=True, help_text='')
     dv = models.CharField(max_length=1)
-    nombres = models.CharField(max_length=25)
-    a_paterno = models.CharField(max_length=25)
-    a_materno = models.CharField(max_length=25)
+    nombres = models.CharField(max_length=100)
+    a_paterno = models.CharField(max_length=100)
+    a_materno = models.CharField(max_length=100)
     telefono = models.IntegerField()
-    email = models.CharField(max_length=25)
-    direccion = models.CharField(max_length=50)
+    email = models.CharField(max_length=100)
+    direccion = models.CharField(max_length=100)
     administrador = models.BooleanField(default=False,null=False)
     usuario = models.OneToOneField(User,on_delete=models.CASCADE, null=True)
 
