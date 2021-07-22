@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Lista de Platos</h1>
+    <h2>Cantidad: {{ cantidad }}</h2>
+    <table border="1" style="height: 30px;">
+        <thead>
+            <td>Codigo plato</td>
+            <td>Nombre</td>
+            <td>Descripcion</td>
+            <td>Tipo comida</td>
+            <td>Dia</td>
+            <td>Precio</td>
+            <td>Codigo servicio</td>
+        </thead>
+        <tbody>           
+            {% for comedor in comedores %}
+                <tr style="padding: 3px;">
+                    <td>{{ comedor.codigo_plato }}</td>
+                    <td>{{ comedor.nombre }}</td>
+                    <td>{{ comedor.descripcion }}</td>
+                    <td>{{ comedor.tipo_comida }}</td>
+                    <td>{{ comedor.dia }}</td>
+                    <td>{{ comedor.precio }}</td>
+                    <td>{{ comedor.codigo_servicio }}</td>
+                </tr>
+            {% endfor %}     
+        </tbody>
+    </table>
+</body>
+</html>

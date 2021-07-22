@@ -1,11 +1,75 @@
 {% extends "base_generic.html" %}
 {% block title %}Home{% endblock %}
-{% block title_main %}Bienvenido {{user.first_name}} {{user.last_name}}{% endblock %}
+{% block title_main %}Home{{user.first_name}} {{user.last_name}}{% endblock %}
 
 {% block content %}
+{% load static %}
 <main role="main" class="container ">
     <div style="margin-bottom: 100%;">
 
+        <h3 class="lead" style="color: #596272"><strong>Bienvenid@ {{ user.username }}</strong></h3><br>
+
+        <div class="row">
+
+            <!-- Content Column -->
+            <div class="col-lg-6 mb-4">
+
+                <!-- Project Card Example -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Hora y Fecha</h6>
+                    </div>
+                    {% if user.is_authenticated %}
+                    <h2>
+                        <p class="lead p-4 pb-0">
+                            {% now "G F Y" %}</p>
+                        <p class="h1 p-4 pb-0 pt-0" style="font-size: 60px; margin-top: -25px;">
+                            {% now "H:i" %}</p>
+                    </h2>
+                    {% endif %}
+                </div>
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Usuarios</h6>
+                    </div>
+                    <div class="card-body pb-0">
+
+                        <p class="lead"><strong>
+                            Bienveni@ al Portal de Usuario del Hostal Doña Clarita. Acá podrás gestionar todas las
+                            operaciones correspondientes a tu rol de usuario.
+                        </strong></p>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-lg-6 mb-4">
+
+                <!-- Illustrations -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Sitio Web</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center">
+                            <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
+                                src="{% static 'img/logo-hostal3.png' %}" alt="...">
+                        </div>
+                        <p><a target="_blank" rel="nofollow" href="{% url 'index' %}">Hostal Doña Clarita</a>, es una
+                            empresa familiar dedicada al
+                            alojamiento y servicio de comedor para empresas, orientada principalmente a dar un servicio
+                            de calidad y seguridad a trabajadores que necesitan hospedaje por diversos periodos de
+                            tiempo. Este servicio es exclusivo para empresas...</p>
+                        <a target="_blank" rel="nofollow" href="{% url 'index' %}">Ingresa al Sitio Web &rarr;</a>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
     </div>
+
 </main>
 {% endblock %}

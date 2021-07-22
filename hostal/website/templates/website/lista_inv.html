@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Inventario</h1>
+    <h2>Cantidad: {{ cantidad }}</h2>
+    <table border="1" style="height: 30px;">
+        <thead>
+            <td>Codigo</td>
+            <td>Nombre</td>
+            <td>Fec. actual</td>
+            <td>Fec. elaboracion</td>
+            <td>Fec. vencimiento</td>
+            <td>Total cantidades</td>
+            <td>Responsable</td>
+            <td>Acciones</td>  
+        </thead>
+        <tbody>           
+            {% for inventario in inventarios %}
+    
+            <td>{{ inventario.codigo}}</td>
+            <td>{{ inventario.nombre }}</td>
+            <td>{{ inventario.fecha_actual }}</td>
+            <td>{{ inventario.fecha_elaboracion }}</td>
+            <td>{{ inventario.fecha_vencimiento}}</td>
+            <td>{{ inventario.total_cantidad}}</td>
+            <td>{{ inventario.responsable}}</td>
+                </tr>
+            {% endfor %}     
+        </tbody>
+    </table>
+</body>
+</html>

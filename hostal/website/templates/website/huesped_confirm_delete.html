@@ -7,11 +7,11 @@
     <h3 class="lead" style="color: #596272"><strong>Eliminar Huesped</strong></h3><br>
 
     <div>
-        <a class="nav-link mb-2" href="{% url 'habitaciones' %}">
+        <a class="nav-link mb-2" href="{% url 'huespedes' %}">
                 <i class="fas fa-chevron-left"></i> Volver</a>
     </div><br> 
 
-    <div class="rounded shadow p-4 col-12 bg-white" style="margin-bottom: 100%;">
+    <div class="card rounded shadow p-4 col-12 bg-white" style="margin-bottom: 100%;">
         <h5 style="font-weight: lighter;">¿Desea eliminar el registro de huesped <strong>{{ huesped.nombre }}</strong>?</h5><br>
 
         <form action="" method="POST">

@@ -1,3 +1,4 @@
+from django.utils.timezone import activate, now
 from website.utils import render_to_pdf
 from django.contrib.auth import update_session_auth_hash
 from django.db import models
@@ -14,6 +15,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.views import generic
 from django.db.models import Q, fields
+import datetime
 
 from .forms import AddHuespedReservaForm, ClienteCreateForm, ClienteUpdateForm, EmpleadoCreateForm, EmpleadoUpdateForm, ProveedorCreateForm, ProveedorUpdateForm, UsuarioCreateForm, UsuarioUpdateForm, ReservaCreateForm, ReservaUpdateForm
 from .models import Cliente, Factura, Orden_pedido, Comedor, Proveedor, Producto, Habitacion, ReservaHuesped, Rubro_proveedor, Servicio, Empleado, Ordenesdecompra, Inventario, Huesped, Reserva
@@ -28,6 +30,31 @@ def index(request):
 
 def habs(request):
     return render(request, 'website/habs.html')     
+
+def informes(request):
+    num_clientes = Cliente.objects.all().count()
+    num_habs = Habitacion.objects.all().count()
+    num_reservas = Reserva.objects.all().count()
+    num_user = User.objects.all().count()
+    act_user = User.objects.filter(is_active = True).count()
+    inact_user = User.objects.filter(is_active = False).count()
+    disp_habs = Habitacion.objects.filter(estado='Disponible').count()
+    asig_habs = Habitacion.objects.filter(estado='Asignada').count()
+    mant_habs = Habitacion.objects.filter(estado='En Mantención').count()
+    vige_reservas = Reserva.objects.filter(vigente=True).count()
+    currentTime = datetime.datetime.now()
+    dia_comedor = Comedor.objects.filter(dia=currentTime).count()
+
+    porc_habs_d = (disp_habs*100/num_habs).__round__
+    porc_habs_a = (asig_habs*100/num_habs).__round__
+    porc_habs_m = (mant_habs*100/num_habs).__round__
+    porc_user_a = (act_user*100/num_user).__round__
+    porc_user_i = (inact_user*100/num_user).__round__
+
+    return render(request, 'website/informes.html', context={'num_clientes':num_clientes, 'disp_habs':disp_habs, 'num_habs':num_habs, 
+    'asig_habs':asig_habs, 'mant_habs':mant_habs, 'vige_reservas':vige_reservas, 'porc_habs_d':porc_habs_d, 'porc_habs_a':porc_habs_a, 'porc_habs_m':porc_habs_m,
+    'num_reservas':num_reservas, 'dia_comedor':dia_comedor, 'num_user':num_user, 'act_user':act_user, 'porc_user_a':porc_user_a, 
+    'inact_user':inact_user, 'porc_user_i':porc_user_i}) 
 
 def clientes(request):
     busqueda = request.GET.get("buscar")
@@ -65,14 +92,30 @@ def huespedes(request):
       
 # vista producto
 def producto(request):
-    return render(request, 'website/producto.html')
+    busqueda = request.GET.get("buscar")
+    producto = Producto.objects.all()
+
+    if busqueda:
+        producto = Producto.objects.filter(
+            Q(codigo_producto__icontains = busqueda)
+        ).distinct()
+
+    return render(request, 'website/producto.html', {'producto':producto}) 
 
 # vista USUARIOS
 
 
 # vista INVENTARIO 
 def inventario(request):
-    return render(request, 'website/inventario.html')
+    busqueda = request.GET.get("buscar")
+    inventario = Inventario.objects.all()
+
+    if busqueda:
+        inventario = Inventario.objects.filter(
+            Q(codigo__icontains = busqueda)
+        ).distinct()
+
+    return render(request, 'website/inventario.html', {'inventario':inventario})  
 
 # vista PLATO-COMEDOR
 def comedor(request):
@@ -90,16 +133,16 @@ class ComedorCreate(CreateView):
     model = Comedor
     fields = '__all__'
     template_name = 'website/comedor_form.html'
-    success_url = reverse_lazy('comedor_list')
+    success_url = reverse_lazy('comedor')
 
 class  ComedorUpdate(UpdateView):
     model = Comedor
     fields = '__all__'
-    success_url = reverse_lazy('comedor_list')
+    success_url = reverse_lazy('comedor')
 
 class ComedorDelete(DeleteView):
     model = Comedor
-    success_url = reverse_lazy('comedor_list')
+    success_url = reverse_lazy('comedor')
 
 class ComedorDetailView(generic.DetailView):
     model = Comedor    
@@ -107,6 +150,24 @@ class ComedorDetailView(generic.DetailView):
 class ComedorListView(generic.ListView):
     model = Comedor
     template_name = 'website/comedor_list.html'
+
+class ListComedoresPdf(View):
+    def get(self, request, *args, **kwargs):
+        comedores = Comedor.objects.all()
+        data = {
+            'comedores': comedores,
+            'cantidad': comedores.count()
+        }
+        pdf = render_to_pdf('website/lista_com.html', data)
+
+        if pdf:
+            response = HttpResponse(pdf, content_type='aplications/pdf')
+            filename = "lista_platos.pdf"
+            content  = "inline; filename=%s" %(filename)
+            response['Content-Disposition'] = content
+            return response
+
+        return HttpResponse("Not Found")       
      
 
 #EMPLEADOS JUAN
@@ -125,7 +186,7 @@ class EmpleadoCreate(CreateView):
     template_name = 'website/empleado_form.html'
     form_class = EmpleadoCreateForm
     form_user = UserCreationForm    
-    success_url = reverse_lazy('empleados_list')
+    success_url = reverse_lazy('empleados')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -184,7 +245,7 @@ class EmpleadoCreate(CreateView):
             
             empleado.save()
 
-            return redirect('empleados_list')
+            return redirect('empleados')
         
         else:
             args = {'form':form,'form2':form2}
@@ -194,6 +255,7 @@ class EmpleadoUpdate(UpdateView):
     template_name = 'website/empleado_update.html'
     form_class = EmpleadoUpdateForm
     model = Empleado
+    success_url = reverse_lazy('empleados')
     
     def get_context_data(self, **kwargs):
         context = super(EmpleadoUpdate, self).get_context_data(**kwargs)
@@ -207,7 +269,7 @@ class EmpleadoUpdate(UpdateView):
 
 class EmpleadoDelete(DeleteView):
     model = Empleado
-    success_url = reverse_lazy('empleados_list')
+    success_url = reverse_lazy('empleados')
 
 class EmpleadoDetailView(generic.DetailView):
     model = Empleado    
@@ -215,6 +277,25 @@ class EmpleadoDetailView(generic.DetailView):
 class EmpleadoListView(generic.ListView):
     model = Empleado
     template_name = 'website/empleados_list.html'
+
+
+class ListEmpleadosPdf(View):
+    def get(self, request, *args, **kwargs):
+        empleados = Empleado.objects.all()
+        data = {
+            'empleados': empleados,
+            'cantidad': empleados.count()
+        }
+        pdf = render_to_pdf('website/lista_emp.html', data)
+
+        if pdf:
+            response = HttpResponse(pdf, content_type='aplications/pdf')
+            filename = "lista_empleados.pdf"
+            content  = "inline; filename=%s" %(filename)
+            response['Content-Disposition'] = content
+            return response
+
+        return HttpResponse("Not Found")         
      
 #juan Ordenes de compra
 
@@ -315,7 +396,7 @@ class ClienteCreate(CreateView):
     template_name = 'website/cliente_form.html'
     form_class = ClienteCreateForm
     form_user = UserCreationForm    
-    success_url = reverse_lazy('clientes_list')
+    success_url = reverse_lazy('clientes')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -359,7 +440,7 @@ class ClienteCreate(CreateView):
             
             cliente.save()            
 
-            return redirect('clientes_list')
+            return redirect('clientes')
         
         else:
             args = {'form':form,'form2':form2}
@@ -369,6 +450,7 @@ class ClienteUpdate(UpdateView):
     template_name = 'website/cliente_update.html'
     form_class = ClienteUpdateForm
     model = Cliente
+    success_url = reverse_lazy('clientes')
 
     def get_context_data(self, **kwargs):
         context = super(ClienteUpdate, self).get_context_data(**kwargs)
@@ -381,7 +463,7 @@ class ClienteUpdate(UpdateView):
 
 class ClienteDelete(DeleteView):
     model = Cliente
-    success_url = reverse_lazy('clientes_list')
+    success_url = reverse_lazy('clientes')
 
 class ClienteDetailView(generic.DetailView):
     model = Cliente    
@@ -391,12 +473,30 @@ class ClienteListView(generic.ListView):
     template_name = 'website/clientes_list.html'
     ordering = 'rut_cliente' 
 
+class ListClientesPdf(View):
+    def get(self, request, *args, **kwargs):
+        clientes = Cliente.objects.all()
+        data = {
+            'clientes': clientes,
+            'cantidad': clientes.count()
+        }
+        pdf = render_to_pdf('website/lista_cli.html', data)
+
+        if pdf:
+            response = HttpResponse(pdf, content_type='aplications/pdf')
+            filename = "lista_clientes.pdf"
+            content  = "inline; filename=%s" %(filename)
+            response['Content-Disposition'] = content
+            return response
+
+        return HttpResponse("Not Found")    
+
 
 class HabitacionCreate(CreateView):
     model = Habitacion
     fields = '__all__'
     template_name = 'website/habitacion_form.html'
-    success_url = reverse_lazy('habitaciones_list')
+    success_url = reverse_lazy('habitaciones')
 
 class HabitacionListView(generic.ListView):
     model = Habitacion
@@ -406,11 +506,11 @@ class HabitacionListView(generic.ListView):
 class HabitacionUpdate(UpdateView):
     model = Habitacion
     fields = '__all__'
-    success_url = reverse_lazy('habitaciones_list')  
+    success_url = reverse_lazy('habitaciones')  
 
 class HabitacionDelete(DeleteView):
     model = Habitacion
-    success_url = reverse_lazy('habitaciones_list')      
+    success_url = reverse_lazy('habitaciones')      
     
 class ListHabitacionesPdf(View):
     def get(self, request, *args, **kwargs):
@@ -420,7 +520,15 @@ class ListHabitacionesPdf(View):
             'cantidad': habitaciones.count()
         }
         pdf = render_to_pdf('website/lista_hab.html', data)
-        return HttpResponse(pdf, content_type='aplications/pdf')   
+
+        if pdf:
+            response = HttpResponse(pdf, content_type='aplications/pdf')
+            filename = "lista_habitaciones.pdf"
+            content  = "inline; filename=%s" %(filename)
+            response['Content-Disposition'] = content
+            return response
+
+        return HttpResponse("Not Found")   
 
 
 class ProveedorCreate(CreateView):    
@@ -530,17 +638,17 @@ class ProductoCreate(CreateView):
     model = Producto
     fields = '__all__'
     template_name = 'website/producto_form.html'
-    success_url = reverse_lazy('producto_list')
+    success_url = reverse_lazy('producto')
 
 class ProductoUpdate(UpdateView):
     model = Producto
     #fields = ['nombre','telefono','email','direccion','usuario','contrasenia']    
     fields = '__all__'
-    success_url = reverse_lazy('producto_list')
+    success_url = reverse_lazy('producto')
 
 class ProductoDelete(DeleteView):
     model = Producto
-    success_url = reverse_lazy('producto_list')
+    success_url = reverse_lazy('producto')
 
 class ProductoDetailView(generic.DetailView):
     model = Producto    
@@ -548,6 +656,24 @@ class ProductoDetailView(generic.DetailView):
 class ProductoListView(generic.ListView):
     model = Producto
     template_name = 'website/producto_list.html'
+
+class ListProductosPdf(View):
+    def get(self, request, *args, **kwargs):
+        productos = Producto.objects.all()
+        data = {
+            'productos': productos,
+            'cantidad': productos.count()
+        }
+        pdf = render_to_pdf('website/lista_pro.html', data)
+
+        if pdf:
+            response = HttpResponse(pdf, content_type='aplications/pdf')
+            filename = "lista_productos.pdf"
+            content  = "inline; filename=%s" %(filename)
+            response['Content-Disposition'] = content
+            return response
+
+        return HttpResponse("Not Found")       
 
 #USUARIO CRUD
 
@@ -557,16 +683,16 @@ class InventarioCreate(CreateView):
     model = Inventario
     fields = '__all__'
     template_name = 'website/inventario_form.html'
-    success_url = reverse_lazy('inventario_list')
+    success_url = reverse_lazy('inventario')
 
 class InventarioUpdate(UpdateView):
     model = Inventario  
     fields = '__all__'
-    success_url = reverse_lazy('inventario_list')
+    success_url = reverse_lazy('inventario')
 
 class InventarioDelete(DeleteView):
     model = Inventario
-    success_url = reverse_lazy('inventario_list')
+    success_url = reverse_lazy('inventario')
 
 class InventarioDetailView(generic.DetailView):
     model = Inventario    
@@ -579,6 +705,24 @@ class InventarioListView(generic.ListView):
 class UsuarioListView(generic.ListView):
     model = User
     template_name = 'website/usuario_list.html'
+
+class ListInventariosPdf(View):
+    def get(self, request, *args, **kwargs):
+        inventarios = Inventario.objects.all()
+        data = {
+            'inventarios': inventarios,
+            'cantidad': inventarios.count()
+        }
+        pdf = render_to_pdf('website/lista_inv.html', data)
+
+        if pdf:
+            response = HttpResponse(pdf, content_type='aplications/pdf')
+            filename = "lista_inventario.pdf"
+            content  = "inline; filename=%s" %(filename)
+            response['Content-Disposition'] = content
+            return response
+
+        return HttpResponse("Not Found")    
 
 def UsuarioCreate(request):
     if request.method == 'POST':
@@ -851,3 +995,6 @@ class GrupoDeleteView(DeleteView):
     model = Group
     template_name = 'website/group_confirm_delete.html'
     success_url = reverse_lazy('groups_list')
+
+
+currentTime = datetime.datetime.now()

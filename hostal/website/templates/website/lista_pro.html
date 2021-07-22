@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Lista de Productos</h1>
+    <h2>Cantidad: {{ cantidad }}</h2>
+    <table border="1" style="height: 30px;">
+        <thead>
+            <td>codigo_producto</td>
+            <td>nombre</td>
+            <td>familia</td>
+            <td>descripcion</td>
+            <td>fecha_elaboracion</td>
+            <td>fecha_vencimineto</td>
+            <td>stock</td>
+            <td>stock_critico</td>
+            <td>precio_unitario</td>
+            <td>item</td>
+        </thead>
+        <tbody>           
+            {% for producto in productos %}
+                <tr style="padding: 3px;">
+                    <td>{{ producto.codigo_producto}}</td>
+                    <td>{{ producto.nombre }}</td>
+                    <td>{{ producto.familia }}</td>
+                    <td>{{ producto.descripcion }}</td>
+                    <td>{{ producto.fecha_elaboracion }}</td>
+                    <td>{{ producto.fecha_vencimineto }}</td>
+                    <td>{{ producto.stock }}</td>
+                    <td>{{ producto.stock_critico }}</td>
+                    <td>{{ producto.precio_unitario }}</td>
+                    <td>{{ producto.item }}</td>
+                </tr>
+            {% endfor %}     
+        </tbody>
+    </table>
+</body>
+</html>

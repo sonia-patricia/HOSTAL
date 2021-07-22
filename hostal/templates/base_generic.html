@@ -24,6 +24,8 @@
     <!-- Bootstrap core CSS -->
     <link href="{% static 'assets/dist/css/bootstrap.min.css' %}" rel="stylesheet">
 
+
+
     <style>
       .bd-placeholder-img {
         font-size: 1.125rem;
@@ -43,7 +45,7 @@
     
     <!-- Custom styles for this template -->    
     <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">     
-    <link href="{% static 'css/mantenedor2.css' %}" rel="stylesheet"> 
+    <link href="{% static 'css/mantenedor3.css' %}" rel="stylesheet"> 
   </head>
   <body>
     
@@ -147,13 +149,13 @@
           </li>
           {% endif %}
           {% if user.groups.all.0.name == "Administrador" %}
-          <li class="nav-item">
+          <!--<li class="nav-item">
             <a class="nav-link" href="{% url 'ordenesdecompras' %}">
               <span data-feather="file-text"></span>
               <i class="fas fa-file" style="width:15%;float:inline-end;"></i>
               Ordenes de compra
             </a>
-          </li>
+          </li>-->
           {% endif %}
           {% if user.groups.all.0.name == "Administrador" %}
           <li class="nav-item">
@@ -202,7 +204,7 @@
           {% endif %}
           {% if user.groups.all.0.name == "Administrador" %}
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="{% url 'informes' %}">
               <span data-feather="file-text"></span>
               <i class="fas fa-chart-line" style="width:15%;float:inline-end;"></i>
               Informes y estadísticas

@@ -7,6 +7,7 @@ from . import views
 
 urlpatterns = [
     path('home', views.home, name='home'),
+    path('informes', views.informes, name='informes'),
     path('index', views.index, name='index'),
     path('habs', views.habs, name='habs'),
     path('cambiar_clave', views.ChangePasswordView, name='cambiar_clave'),
@@ -17,6 +18,7 @@ urlpatterns = [
     path('cliente/create', views.ClienteCreate.as_view(), name='cliente_create'),
     path('cliente/<int:pk>/update', views.ClienteUpdate.as_view(), name='cliente_update'),
     path('cliente/<int:pk>/delete', views.ClienteDelete.as_view(), name='cliente_delete'),
+    path('clientes/pdf', views.ListClientesPdf.as_view(), name='clientes_pdf'),
 
     path('habitaciones', views.habitaciones, name='habitaciones'),
     path('habitacion/create', views.HabitacionCreate.as_view(), name='habitacion_create'),
@@ -48,7 +50,7 @@ urlpatterns = [
     path('producto/create', views.ProductoCreate.as_view(), name='producto_create'),
     path('producto/<int:pk>/update', views.ProductoUpdate.as_view(), name='producto_update'),
     path('producto/<int:pk>/delete', views.ProductoDelete.as_view(), name='producto_delete'),
-
+    path('productos/pdf', views.ListProductosPdf.as_view(), name='productos_pdf'),
 
     #Listar, Detalles, Crear, Actualizar, Eliminar  USUARIO
     path('usuario', views.UsuarioListView.as_view(), name= 'usuario_list'),
@@ -69,6 +71,8 @@ urlpatterns = [
     path('empleado/create', views.EmpleadoCreate.as_view(), name='empleado_create'),
     path('empleado/<int:pk>/update', views.EmpleadoUpdate.as_view(), name='empleado_update'),
     path('empleado/<int:pk>/delete', views.EmpleadoDelete.as_view(), name='empleado_delete'),
+    path('empleados/pdf', views.ListEmpleadosPdf.as_view(), name='empleados_pdf'),
+
 
     path('ordenesdecompras',views.ordenesdecompra,name='ordenesdecompras'),
     path('ordenesdecompras/list', views.OrdenesdecompraListView.as_view(), name='ordenesdecompras_list'),
@@ -84,6 +88,7 @@ urlpatterns = [
     path('comedor/create', views.ComedorCreate.as_view(), name='comedor_create'),
     path('comedor/<int:pk>/update', views.ComedorUpdate.as_view(), name='comedor_update'),
     path('comedor/<int:pk>/delete', views.ComedorDelete.as_view(), name='comedor_delete'),
+    path('comedores/pdf', views.ListComedoresPdf.as_view(), name='comedores_pdf'),
 
     #FACTURA
     path('facturas',views.factura,name='facturas'),
@@ -100,6 +105,7 @@ urlpatterns = [
     path('inventario/create', views.InventarioCreate.as_view(), name='inventario_create'),
     path('inventario/<int:pk>/update', views.InventarioUpdate.as_view(), name='inventario_update'),
     path('inventario/<int:pk>/delete', views.InventarioDelete.as_view(), name='inventario_delete'),
+    path('inventarios/pdf', views.ListInventariosPdf.as_view(), name='inventarios_pdf'),
 
     path('huesped', views.huespedes, name='huespedes'),
     path('huesped',views.HuespedListView.as_view(),name='huesped_list'),

@@ -1,0 +1,273 @@
+{% extends "base_generic.html" %}
+{% block title %}Informes y Estadísticas{% endblock %}
+{% block title_main %}Informes y Estadísticas{{user.first_name}} {{user.last_name}}{% endblock %}
+
+{% block content %}
+{% load static %}
+<main role="main" class="container ">
+
+    <h3 class="lead" style="color: #596272"><strong>Dashboard</strong></h3><br>
+
+    <div style="margin-bottom: 100%;">
+
+        <div class="row">
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Cantidad Clientes</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ num_clientes }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-male fa-2x" style="color: #bbbbbb"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    Reservas Vigentes</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ vige_reservas }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-hotel fa-2x" style="color: #bbbbbb"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Earnings (Monthly) Card Example 
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-info shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
+                                </div>
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col-auto">
+                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ dia_comedor }}<span
+                                                class="lead"> ({{ porc_habs_d }}%)</span></div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="progress progress-sm mr-2">
+                                            <div class="progress-bar bg-info" role="progressbar"
+                                                style="width:{{ porc_habs_d }}%" aria-valuenow="50" aria-valuemin="0"
+                                                aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-clipboard-list fa-2x" style="color: #bbbbbb"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>-->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-info shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    Platos del Dia</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ dia_comedor }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-utensils fa-2x" style="color: #bbbbbb"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pending Requests Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                    Cantidad Usuarios</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ num_user }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-user fa-2x" style="color: #bbbbbb"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Cantidad Habs</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ num_habs }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-bed fa-2x" style="color: #bbbbbb"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Habs Disponibles</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ disp_habs }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-bed fa-2x" style="color: #bbbbbb"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-info shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Habs Asignadas</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ asig_habs }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-bed fa-2x" style="color: #bbbbbb"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Habs Mantención</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ mant_habs }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-bed fa-2x" style="color: #bbbbbb"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <!-- Content Column -->
+            <div class="col-lg-6 mb-4">
+
+                <!-- Project Card Example -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Habitaciones</h6>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="small font-weight-bold">Habitaciones Disponibles <span
+                            class="">{{ porc_habs_d }}%</span></h4>
+                        <div class="progress mb-4">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: {{ porc_habs_d }}%"
+                                aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <h4 class="small font-weight-bold">Habitaciones Asignadas <span
+                            class="">{{ porc_habs_a }}%</span></h4>
+                        <div class="progress mb-4">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: {{ porc_habs_a }}%"
+                                aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <h4 class="small font-weight-bold">Habitaciones en Mantención <span 
+                            class="">{{porc_habs_m }}%</span></h4>
+                        <div class="progress mb-4">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: {{ porc_habs_m }}%"
+                                aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Usuarios</h6>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="small font-weight-bold">Usuarios Activos <span
+                            class="">{{ act_user }} ({{ porc_user_a }}%)</span></h4>
+                        <div class="progress mb-4">
+                            <div class="progress-bar " role="progressbar" style="width: {{ porc_user_a }}%"
+                                aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <h4 class="small font-weight-bold">Usuarios Inactivos <span
+                            class="">{{ inact_user }} ({{ porc_user_i }}%)</span></h4>
+                        <div class="progress mb-4">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: {{ porc_user_i }}%"
+                                aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-lg-6 mb-4">
+
+                <!-- Illustrations -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Sitio Web</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center">
+                            <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
+                                src="{% static 'img/logo-hostal3.png' %}" alt="...">
+                        </div>
+                        <p><a target="_blank"
+                                rel="nofollow" href="{% url 'index' %}">Hostal Doña Clarita</a>, es una empresa familiar dedicada al
+                            alojamiento y servicio de comedor para empresas, orientada principalmente a dar un servicio
+                            de calidad y seguridad a trabajadores que necesitan hospedaje por diversos periodos de
+                            tiempo. Este servicio es exclusivo para empresas...</p>
+                        <a target="_blank" rel="nofollow" href="{% url 'index' %}">Ingresa al Sitio Web &rarr;</a>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

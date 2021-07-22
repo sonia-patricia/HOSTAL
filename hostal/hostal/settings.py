@@ -149,6 +149,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 ALLOWED_HOSTS=['*']
 CORS_ORIGIN_ALLOW_ALL = True
 
+
 LOGIN_REDIRECT_URL='/website/home'
 LOGOUT_REDIRECT_URL='/accounts/login'
 CRISPY_TEMPLATE_PACK='bootstrap4'

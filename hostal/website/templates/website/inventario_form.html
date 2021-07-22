@@ -41,12 +41,12 @@
     <h3 class="lead" style="color: #596272"><strong>Actualizar inventario</strong></h3><br>
 
     <div>
-        <a class="nav-link mb-2" href="{% url 'inventario_list' %}">
+        <a class="nav-link mb-2" href="{% url 'inventario' %}">
                 <i class="fas fa-chevron-left"></i> Volver</a>
     </div>
     {% endif %}
-
-    <div class="col-12">
+    <br>
+    <div class="card rounded shadow p-4 col-12 bg-white" style="margin-bottom: 100%;">
         <form action="" method="POST" class="post-form" enctype="multipart/form-data">
             <div>
                 {%csrf_token%}

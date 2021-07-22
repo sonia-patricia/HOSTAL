@@ -34,8 +34,9 @@
         <a class="nav-link mb-2" href="{% url 'empleados' %}">
                 <i class="fas fa-chevron-left"></i> Volver</a>
     </div>
+    <br>
 
-    <div class="col-12">
+    <div class="card rounded shadow p-4 col-12 bg-white" style="margin-bottom: 100%;">
         <form action="" method="POST" class="post-form" enctype="multipart/form-data">
             <div>
                 {%csrf_token%}

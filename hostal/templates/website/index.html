@@ -10,14 +10,10 @@
                 {% load static %}
 
                 <div class="carousel-item active">
-                    <img class="img-fluid"
-                        src="{% static 'img/index_carousel/carousel-01.png' %}"
-                        alt="">
+                    <img class="img-fluid" src="{% static 'img/index_carousel/carousel-01.png' %}" alt="">
                 </div>
                 <div class="carousel-item">
-                    <img class="img-fluid"
-                        src="{% static 'img/index_carousel/carousel-2.png' %}"
-                        alt="">
+                    <img class="img-fluid" src="{% static 'img/index_carousel/carousel-02.png' %}" alt="">
                 </div>
 
                 <!-- botones de desplazamiento a izquierda y derecha -->
@@ -35,7 +31,7 @@
                     <li data-target="#carousel1" data-slide-to="1"></li>
                 </ol>
             </div>
-            <br><br>
+            <br><br><br><br>
         </div>
 
         <div class="row " id="qSomos">
@@ -44,34 +40,42 @@
             </div>
 
             <div class="col-lg-6">
-                <br>
+                
                 <div>
                     <!--<h1 style="font-family: 'Pacifico', cursive !important;">Hostal Doña Clarita</h1><br>-->
-                    <h2 class="" style="color: #EA2F6C !important;"><strong>Quiénes somos</strong></h2><br>
+                    <h2 class="" style="color: #EA2F6C !important;"><strong>Nosotros</strong></h2>
+                    <h4 class="" style="color: purple !important;">Nuestra tradición es el servicio de excelencia</h4>
+                    <br>
                     <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque fermentum ligula accumsan
-                        efficitur pretium. Nullam posuere pulvinar felis sed scelerisque. <br><br>
+                        Hostal Doña Clarita, es una empresa familiar dedicada al alojamiento y servicio
+                        de comedor para
+                        empresas, orientada principalmente a dar un servicio de calidad y seguridad a trabajadores que
+                        necesitan hospedaje por diversos periodos de tiempo. Este servicio es exclusivo para empresa, no
+                        se
+                        aceptan
+                        clientes particulares. <br><br>
 
-                        Suspendisse semper massa ac lectus hendrerit sagittis. Proin ac venenatis sapien. Maecenas
-                        dapibus a odio sed placerat. <br><br>
+                        Ubicado en Rancagua, a pocos kilómetros del centro de convenciones
+                        Monticello y del Casino Monticello, Hostal Doña Clarita ofrece alojamiento con salón compartido,
+                        conexión
+                        WiFi gratuita y aparcamiento
+                        privado
+                        gratuito. También cuenta con recepción 24 horas. El hostal cuenta con habitaciones individuales,
+                        individuales premium, dobles y un espectacular loft. <br><br>
 
-                        Curabitur maximus, urna ac tempor sagittis, nibh arcu accumsan velit, ut porttitor mauris nibh
-                        sit amet diam. Suspendisse sed fringilla odio.
+                        Todas las habitaciones del hostal están equipadas con TV de pantalla plana con canales vía
+                        satélite, zona de cocina y zona de comedor. Todas las habitaciones incluyen escritorio y
+                        hervidor de agua.<br><br>
 
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque fermentum ligula accumsan
-                        efficitur pretium. Nullam posuere pulvinar felis sed scelerisque. <br><br>
+                        El centro comercial Portal Rancagua se encuentra a 2,8 km del establecimiento, mientras que el
+                        estadio El Teniente está a 3,8 km. El aeropuerto más cercano es el aeropuerto internacional de
+                        Santiago, ubicado a 87 km del Hostal Doña Clarita.<br><br>
 
-                        Suspendisse semper massa ac lectus hendrerit sagittis. Proin ac venenatis sapien. Maecenas
-                        dapibus a odio sed placerat. <br><br>
+                        Los invitamos a disfrutar de una estadía acogedora y de excelencia, además del calor humano de
+                        cada uno de nuestros trabajadores y, por supuesto, de nuestra anfitriona Doña Clarita.<br><br>
 
-                        Curabitur maximus, urna ac tempor sagittis, nibh arcu accumsan velit, ut porttitor mauris nibh
-                        sit amet diam. Suspendisse sed fringilla odio.
-                       
-                        Suspendisse semper massa ac lectus hendrerit sagittis. Proin ac venenatis sapien. Maecenas
-                        dapibus a odio sed placerat. <br><br>
+                        <strong>¡Bienvenidos!</strong>
 
-                        Curabitur maximus, urna ac tempor sagittis, nibh arcu accumsan velit, ut porttitor mauris nibh
-                        sit amet diam. Suspendisse sed fringilla odio.
                     </p>
                 </div>
             </div>
@@ -79,8 +83,10 @@
         </div>
 
         <div class="container">
-            <br><hr><br>
-            <h2 style="color: purple !important; text-align: center; font-weight: lighter;"><strong>¡Ingresa y conoce nuestro portal de usuario!</strong></h2><br>
+            <br><br>
+            <br>
+            <h4 class="" style="color: purple !important; text-align: center;">¡Ingresa y conoce
+                    nuestro portal de usuario!</h4><br>
             <div class="row">
 
                 <div class="col-md">
@@ -88,11 +94,14 @@
                         <img class="card-img-top mx-auto shadow mt-3" src="{% static 'img/portal.png' %}">
                         <div class="shadow">
                             {% if user.is_authenticated %}
-                            <a href="{% url 'home' %}" class="btn btn-primary col-12" style="border-radius: 0px 0px 5px 5px;">Ingresar</a>
+                            <a href="{% url 'home' %}" class="btn btn-primary col-12"
+                                style="border-radius: 0px 0px 5px 5px;">Ingresar</a>
+
                             {% else %}
-                            <a href="{% url 'login' %}" class="btn btn-primary col-12" style="border-radius: 0px 0px 5px 5px;">Ingresar</a>
+                            <a href="{% url 'login' %}" class="btn btn-primary col-12"
+                                style="border-radius: 0px 0px 5px 5px;">Ingresar</a>
                             {% endif %}
-                        </div>
+                        </div><br><br>
                     </div>
                 </div>
 

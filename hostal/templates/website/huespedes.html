@@ -67,7 +67,7 @@ thead {
         </div>
     </div><br>
 
-    <div class="rounded shadow p-4 pt-1 col-12 bg-white" style="margin-bottom: 100%;">
+    <div class="card rounded shadow p-4 pt-1 col-12 bg-white" style="margin-bottom: 100%;">
         {% url 'huespedes_list' as the_url %}
         {% if request.get_full_path == the_url %}
         {% if object_list %}
